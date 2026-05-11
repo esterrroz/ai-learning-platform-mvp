@@ -1,0 +1,20 @@
+{
+  "name": "ai-learning-platform-mvp",
+  "version": "1.0.0",
+  "description": "> \"A full-stack AI-driven learning platform (Mini MVP) that generates personalized lessons based on user-selected categories, built with React, Node.js, and PostgreSQL.\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/esterrroz/ai-learning-platform-mvp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/esterrroz/ai-learning-platform-mvp/issues"
+  },
+  "homepage": "https://github.com/esterrroz/ai-learning-platform-mvp#readme"
+}
