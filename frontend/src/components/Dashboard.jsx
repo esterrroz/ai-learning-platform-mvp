@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { summarizeText } from '../services/api';
+import { summarizeText, generateQuizFromSummary } from '../services/api';
 import '../styles/Dashboard.css';
 
 export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState('materials');
   const [inputText, setInputText] = useState('');
   const [summary, setSummary] = useState('');
+  const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [quizLoading, setQuizLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSummarize = async () => {
@@ -17,6 +20,7 @@ export default function Dashboard() {
     setLoading(true);
     setError('');
     setSummary('');
+    setQuiz(null);
 
     try {
       const result = await summarizeText(inputText);
@@ -28,66 +32,193 @@ export default function Dashboard() {
     }
   };
 
+  const handleGenerateQuiz = async () => {
+    if (!summary) {
+      setError('Please generate a summary first');
+      return;
+    }
+
+    setQuizLoading(true);
+    setError('');
+    setQuiz(null);
+
+    try {
+      const result = await generateQuizFromSummary(summary);
+      setQuiz(result.quiz || result);
+    } catch (err) {
+      setError(err.toString());
+    } finally {
+      setQuizLoading(false);
+    }
+  };
+
   const handleClear = () => {
     setInputText('');
     setSummary('');
+    setQuiz(null);
+    setError('');
+  };
+
+  const handleQuizClear = () => {
+    setQuiz(null);
     setError('');
   };
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>📚 AI Learning Platform</h1>
-        <p>Paste your text below and get an AI-powered summary</p>
-      </div>
+    <div className="dashboard-wrapper">
+      {/* Sidebar Navigation */}
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <h3>📚 Platform</h3>
+        </div>
+        <nav className="sidebar-nav">
+          <button
+            className={`nav-item ${activeTab === 'materials' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab('materials');
+              handleQuizClear();
+            }}
+          >
+            📝 My Materials
+          </button>
+          <button
+            className={`nav-item ${activeTab === 'study' ? 'active' : ''}`}
+            onClick={() => setActiveTab('study')}
+          >
+            🎓 Study
+          </button>
+        </nav>
+      </aside>
 
-      <div className="dashboard-container">
-        <div className="input-section">
-          <h2>Input Text</h2>
-          <textarea
-            className="textarea"
-            placeholder="Paste or type your text here..."
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            rows="8"
-          />
-          <div className="button-group">
-            <button
-              className="btn btn-primary"
-              onClick={handleSummarize}
-              disabled={loading}
-            >
-              {loading ? 'Summarizing...' : '✨ Summarize'}
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={handleClear}
-              disabled={loading}
-            >
-              Clear
-            </button>
+      {/* Main Content */}
+      <main className="dashboard-content">
+        {activeTab === 'materials' && (
+          <div className="dashboard">
+            <div className="dashboard-header">
+              <h1>📚 AI Learning Platform</h1>
+              <p>Paste your text below and get an AI-powered summary</p>
+            </div>
+
+            <div className="dashboard-container">
+              <div className="input-section">
+                <h2>Input Text</h2>
+                <textarea
+                  className="textarea"
+                  placeholder="Paste or type your text here..."
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  rows="8"
+                  disabled={loading || quizLoading}
+                />
+                <div className="button-group">
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleSummarize}
+                    disabled={loading || quizLoading}
+                  >
+                    {loading ? 'Summarizing...' : '✨ Summarize'}
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleClear}
+                    disabled={loading || quizLoading}
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              <div className="output-section">
+                <h2>Summary</h2>
+                {error && (
+                  <div className="error-box">
+                    <p>❌ Error: {error}</p>
+                  </div>
+                )}
+                {summary && (
+                  <div className="summary-box">
+                    <p>{summary}</p>
+                    <div className="summary-actions">
+                      <button
+                        className="btn btn-accent"
+                        onClick={handleGenerateQuiz}
+                        disabled={quizLoading || !summary}
+                      >
+                        {quizLoading ? 'Generating Quiz...' : '🎯 Generate Quiz'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {!summary && !error && (
+                  <div className="placeholder">
+                    <p>Your summary will appear here...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Quiz Display */}
+            {quiz && (
+              <div className="quiz-display">
+                <div className="quiz-header">
+                  <h2>📋 Quiz Questions</h2>
+                  <button className="btn btn-small" onClick={handleQuizClear}>
+                    ✕ Close
+                  </button>
+                </div>
+                <div className="quiz-content">
+                  {Array.isArray(quiz) && quiz.map((q, index) => (
+                    <div key={index} className="quiz-item">
+                      <div className="quiz-question">
+                        <span className="question-number">Q{index + 1}.</span>
+                        <span>{q.question}</span>
+                        {q.difficulty && (
+                          <span className={`difficulty difficulty-${q.difficulty.toLowerCase()}`}>
+                            {q.difficulty}
+                          </span>
+                        )}
+                      </div>
+                      <div className="quiz-options">
+                        {q.options && q.options.map((option, optIndex) => (
+                          <div
+                            key={optIndex}
+                            className={`quiz-option ${
+                              optIndex === q.correctAnswer ? 'correct-answer' : ''
+                            }`}
+                          >
+                            <span className="option-letter">
+                              {String.fromCharCode(65 + optIndex)}.
+                            </span>
+                            <span>{option}</span>
+                            {optIndex === q.correctAnswer && (
+                              <span className="correct-badge">✓ Correct</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
-        <div className="output-section">
-          <h2>Summary</h2>
-          {error && (
-            <div className="error-box">
-              <p>❌ Error: {error}</p>
+        {activeTab === 'study' && (
+          <div className="study-page">
+            <div className="study-header">
+              <h1>🎓 Study Hub</h1>
+              <p>Review your materials and track your progress</p>
             </div>
-          )}
-          {summary && (
-            <div className="summary-box">
-              <p>{summary}</p>
+            <div className="study-content">
+              <div className="study-placeholder">
+                <p>Study features coming soon...</p>
+                <p>You can manage your saved materials and quizzes here.</p>
+              </div>
             </div>
-          )}
-          {!summary && !error && (
-            <div className="placeholder">
-              <p>Your summary will appear here...</p>
-            </div>
-          )}
-        </div>
-      </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

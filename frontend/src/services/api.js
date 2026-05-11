@@ -13,6 +13,17 @@ export const summarizeText = async (text) => {
   }
 };
 
+export const generateQuizFromSummary = async (summary) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/materials/generate-quiz`, {
+      summary,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
 export const generateQuiz = async (category, subCategory, prompt) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/generateQuiz`, {

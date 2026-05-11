@@ -1,5 +1,6 @@
 const express = require('express');
 const { summarizeText, generateQuiz } = require('../services/aiService');
+const { generateQuizFromSummary } = require('../services/ai/quizService');
 const { pool } = require('../config/db');
 
 const router = express.Router();
@@ -79,6 +80,45 @@ router.post('/generateQuiz', async (req, res) => {
     });
   } catch (error) {
     console.error('Error in generateQuiz route:', error.message);
+    res.status(500).json({
+      error: error.message || 'Failed to generate quiz',
+    });
+  }
+});
+
+// POST /api/materials/generate-quiz
+router.post('/generate-quiz', async (req, res) => {
+  try {
+    const { summary } = req.body;
+
+    // Validation
+    if (!summary || typeof summary !== 'string') {
+      return res.status(400).json({
+        error: 'Invalid input. Please provide a "summary" field with a string value.',
+      });
+    }
+
+    if (summary.trim().length === 0) {
+      return res.status(400).json({
+        error: 'Summary cannot be empty.',
+      });
+    }
+
+    if (summary.length > 5000) {
+      return res.status(400).json({
+        error: 'Summary is too long. Maximum 5000 characters allowed.',
+      });
+    }
+
+    // Call AI service
+    const quiz = await generateQuizFromSummary(summary);
+
+    res.status(200).json({
+      quiz,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Error in generate-quiz route:', error.message);
     res.status(500).json({
       error: error.message || 'Failed to generate quiz',
     });
