@@ -3,6 +3,7 @@ const cors = require('cors');
 const { pool, waitForDb } = require('./config/db');
 const initDb = require('./models/initDb');
 const materialRoutes = require('./routes/materialRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/materials', materialRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Health check route
 app.get('/health', async (req, res) => {
