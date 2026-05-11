@@ -1,12 +1,18 @@
 const express = require('express');
+const cors = require('cors');
 const { pool, waitForDb } = require('./config/db');
 const initDb = require('./models/initDb');
+const materialRoutes = require('./routes/materialRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use(cors());
 app.use(express.json());
+
+// Routes
+app.use('/api/materials', materialRoutes);
 
 // Health check route
 app.get('/health', async (req, res) => {
