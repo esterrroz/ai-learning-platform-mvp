@@ -61,7 +61,4 @@
 * Docker מותקן (עבור ה-Database).
 * מפתח API של OpenAI.
 
-### **שלבי התקנה**
-1. **שכפול המאגר:**
-   ```bash
-   git clone [https://github.com/esterrroz/ai-learning-platform-mvp.git]  
+
