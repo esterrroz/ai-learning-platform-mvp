@@ -1,5 +1,6 @@
 const express = require('express');
-const pool = require('./config/db');
+const { pool, waitForDb } = require('./config/db');
+const initDb = require('./models/initDb');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,7 +26,22 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Start server and initialize database
+const startServer = async () => {
+  try {
+    console.log('🚀 Starting server...');
+    console.log('⏳ Waiting for database to be ready...');
+    await waitForDb();
+    console.log('📝 Initializing database schema...');
+    await initDb();
+    app.listen(PORT, () => {
+      console.log(`✅ Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    console.error('Error details:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
