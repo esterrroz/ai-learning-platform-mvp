@@ -36,6 +36,17 @@ CREATE TABLE IF NOT EXISTS prompts (
   FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id) ON DELETE CASCADE
 );
 
+-- Create Materials table (for storing summarized texts and generated quizzes)
+CREATE TABLE IF NOT EXISTS materials (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(500) NOT NULL,
+  original_text TEXT NOT NULL,
+  summary TEXT,
+  quiz JSON,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Seed Data: Initial Categories
 INSERT INTO categories (name) VALUES
 ('Programming')

@@ -54,3 +54,44 @@ export const getSubCategories = async (categoryId) => {
     throw error.response?.data?.error || error.message;
   }
 };
+
+export const getMaterials = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/materials`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
+export const getMaterial = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/materials/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
+export const saveMaterial = async (title, original_text, summary, quiz) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/materials`, {
+      title,
+      original_text,
+      summary,
+      quiz,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
+export const deleteMaterial = async (id) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/materials/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};

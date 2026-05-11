@@ -1,42 +1,27 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
+import UploadNew from './components/UploadNew';
 import QuizGenerator from './components/QuizGenerator';
+import MyLibrary from './components/MyLibrary';
 import './App.css';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('dashboard');
-
   return (
-    <div className="App">
-      <nav className="app-nav">
-        <div className="nav-container">
-          <h1 className="nav-logo">📚 AI Learning Platform</h1>
-          <ul className="nav-links">
-            <li>
-              <button
-                className={`nav-btn ${currentPage === 'dashboard' ? 'active' : ''}`}
-                onClick={() => setCurrentPage('dashboard')}
-              >
-                📝 Summarizer
-              </button>
-            </li>
-            <li>
-              <button
-                className={`nav-btn ${currentPage === 'quiz' ? 'active' : ''}`}
-                onClick={() => setCurrentPage('quiz')}
-              >
-                🎓 Quiz Generator
-              </button>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-      <main className="app-main">
-        {currentPage === 'dashboard' && <Dashboard />}
-        {currentPage === 'quiz' && <QuizGenerator />}
-      </main>
-    </div>
+    <Router>
+      <div className="App">
+        <Sidebar />
+        <main className="app-main">
+          <Routes>
+            <Route path="/" element={<UploadNew />} />
+            <Route path="/upload" element={<UploadNew />} />
+            <Route path="/library" element={<MyLibrary />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/quiz" element={<QuizGenerator />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 
