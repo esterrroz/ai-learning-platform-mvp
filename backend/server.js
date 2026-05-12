@@ -1,3 +1,28 @@
+require('dotenv').config();
+
+// ── Environment validation ────────────────────────────────────────────────────
+const REQUIRED_ENV = [
+  { key: 'OPENAI_API_KEY', hint: 'Get it from https://platform.openai.com/api-keys' },
+  { key: 'JWT_SECRET',     hint: 'Set a long random string (e.g. openssl rand -hex 32)' },
+];
+
+// At least one DB config must be present
+const hasDbUrl  = !!process.env.DATABASE_URL;
+const hasDbVars = process.env.DB_HOST && process.env.DB_USER && process.env.DB_NAME;
+if (!hasDbUrl && !hasDbVars) {
+  console.error('❌ Missing database config: set DATABASE_URL (production) or DB_HOST/DB_USER/DB_NAME/DB_PASSWORD/DB_PORT (local)');
+  process.exit(1);
+}
+
+const missingVars = REQUIRED_ENV.filter(({ key }) => !process.env[key]);
+if (missingVars.length > 0) {
+  missingVars.forEach(({ key, hint }) =>
+    console.error(`❌ Missing env var: ${key} — ${hint}`)
+  );
+  process.exit(1);
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
