@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { summarizeText, generateQuizFromSummary, saveMaterial, uploadPDF, getCategories, getSubCategories, generateLessonPrompt } from '../services/api';
+import { useToast } from './ToastProvider';
 import '../styles/Dashboard.css';
 
 export default function Dashboard() {
@@ -24,6 +25,7 @@ export default function Dashboard() {
   const [showLessonSection, setShowLessonSection] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const showToast = useToast();
   const userId = localStorage.getItem('userId');
 
   // Fetch categories on mount
@@ -73,7 +75,9 @@ export default function Dashboard() {
       const result = await summarizeText(inputText, userId, selectedCategory, selectedSubCategory);
       setSummary(result.summary || result);
     } catch (err) {
-      setError(err.toString());
+      const msg = err.toString();
+      setError(msg);
+      showToast(msg);
     } finally {
       setLoading(false);
     }
@@ -111,7 +115,9 @@ export default function Dashboard() {
       // Reset file input
       event.target.value = '';
     } catch (err) {
-      setError(err.toString());
+      const msg = err.toString();
+      setError(msg);
+      showToast(msg);
       event.target.value = '';
     } finally {
       setLoading(false);
@@ -137,7 +143,9 @@ export default function Dashboard() {
       sessionStorage.setItem('pendingQuizTitle', inputText.substring(0, 60));
       navigate('/quiz');
     } catch (err) {
-      setError(err.toString());
+      const msg = err.toString();
+      setError(msg);
+      showToast(msg);
     } finally {
       setQuizLoading(false);
     }
@@ -169,7 +177,9 @@ export default function Dashboard() {
         setSuccess('');
       }, 2000);
     } catch (err) {
-      setError(`${t('dashboard.failedToSave')} ` + err.toString());
+      const msg = `${t('dashboard.failedToSave')} ` + err.toString();
+      setError(msg);
+      showToast(msg);
     } finally {
       setSaving(false);
     }
@@ -215,7 +225,9 @@ export default function Dashboard() {
       setSuccess('✅ ' + t('common.success'));
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError(err.toString());
+      const msg = err.toString();
+      setError(msg);
+      showToast(msg);
     } finally {
       setLessonLoading(false);
     }

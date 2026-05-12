@@ -2,6 +2,24 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
+// Attach JWT to every request if available
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('authToken');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export const loginUser = async (name, phone) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/login`, { name, phone });
+    const { token, user } = response.data;
+    localStorage.setItem('authToken', token);
+    return user;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
 export const registerUser = async (name, phone) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/users`, { name, phone });

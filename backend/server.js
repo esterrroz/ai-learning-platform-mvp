@@ -2,11 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 const { pool, waitForDb } = require('./config/db');
 const initDb = require('./models/initDb');
 const materialRoutes = require('./routes/materialRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const userRoutes     = require('./routes/userRoutes');
+const authRoutes     = require('./routes/authRoutes');
+const { authMiddleware } = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,8 +42,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // Routes
-app.use('/api/materials',  materialRoutes);
+app.use('/api/auth',       authRoutes);
+app.use('/api/materials',  authMiddleware, materialRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/users',      userRoutes);
 
@@ -71,6 +79,7 @@ const startServer = async () => {
     await initDb();
     app.listen(PORT, () => {
       console.log(`✅ Server is running on port ${PORT}`);
+      console.log(`📚 API Docs available at http://localhost:${PORT}/api-docs`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);

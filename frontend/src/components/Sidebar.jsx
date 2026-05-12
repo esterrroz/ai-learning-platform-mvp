@@ -14,6 +14,7 @@ export default function Sidebar({ userName }) {
   const handleLogout = () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
+    localStorage.removeItem('authToken');
     window.location.reload();
   };
 
@@ -80,6 +81,14 @@ export default function Sidebar({ userName }) {
             <span className="user-icon">👤</span>
             <span className="user-name">{userName}</span>
           </div>
+          <a
+            href="http://localhost:5000/api-docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="api-docs-btn"
+          >
+            <span>📄</span> API Documentation
+          </a>
           <button className="logout-btn" onClick={handleLogout}>
             {t('common.signOut', 'Sign Out')}
           </button>

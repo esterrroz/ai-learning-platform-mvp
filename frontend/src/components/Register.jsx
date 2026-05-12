@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { registerUser } from '../services/api';
+import { loginUser } from '../services/api';
 import LanguageSwitcher from './LanguageSwitcher';
 import '../styles/Register.css';
 
@@ -22,7 +22,7 @@ export default function Register({ onRegistered }) {
     setError('');
 
     try {
-      const { user } = await registerUser(name.trim(), phone.trim() || null);
+      const user = await loginUser(name.trim(), phone.trim() || null);
       localStorage.setItem('userId',   String(user.id));
       localStorage.setItem('userName', user.name);
       onRegistered(user);

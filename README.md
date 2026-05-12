@@ -178,6 +178,8 @@ Expected output:
 
 The backend runs on **http://localhost:5000**
 
+> ⚠️ **Both servers must be running simultaneously.** The frontend (port 5173) calls the backend (port 5000) for all AI and data operations. Open two separate terminal windows — one for the backend and one for the frontend.
+
 ### Step 6 — Install frontend dependencies
 
 Open a new terminal:
@@ -201,6 +203,11 @@ Expected output:
 
 Open **http://localhost:5173** in your browser. ✅
 
+> 💡 **Quick reminder:** You need **3 things running at the same time**:
+> 1. Docker (PostgreSQL) — `docker-compose up -d`
+> 2. Backend — `npm run dev` inside `/backend` (port 5000)
+> 3. Frontend — `npm run dev` inside `/frontend` (port 5173)
+
 ---
 
 ## 🔑 Environment Variables
@@ -214,6 +221,7 @@ Open **http://localhost:5173** in your browser. ✅
 | `DB_PORT` | Database port | `5432` |
 | `PORT` | Backend server port | `5000` |
 | `NODE_ENV` | Environment mode | `development` |
+| `JWT_SECRET` | Secret key for signing JWTs | — |
 | `OPENAI_API_KEY` | Your OpenAI API key | — |
 
 > The `OPENAI_API_KEY` must belong to a project with access to `gpt-4o`.
@@ -333,6 +341,26 @@ quizzes
 ### My Library
 - View all saved materials
 - See which materials have summaries and quizzes
+
+---
+
+## 📚 Documentation
+
+The backend exposes an interactive Swagger UI at **`/api-docs`**.
+
+### How to access
+
+1. Start the backend server (`npm run dev` inside `/backend`)
+2. Open your browser and navigate to:
+
+```
+http://localhost:5000/api-docs
+```
+
+You will see a fully interactive OpenAPI 3.0 interface where you can:
+- Browse all available endpoints grouped by tag (Users, Categories, Materials)
+- Inspect request parameters, request body schemas, and expected responses
+- Execute live requests directly from the browser using the **"Try it out"** button
 
 ---
 
