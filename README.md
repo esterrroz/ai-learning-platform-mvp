@@ -377,3 +377,15 @@ npx kill-port 5000
 - `sessionStorage` is used to pass a freshly generated quiz from the Dashboard to the Quiz Generator route without requiring a saved material ID
 - The `quizzes` table stores questions as `JSONB` for efficient querying; `materials.quiz` stores a `JSON` copy for convenience
 - PDF extraction uses `pdf-parse` and runs in-memory (no disk writes)
+## 📖 Example Use Case
+To demonstrate the platform's flow:
+- **User Journey:** A user named "Israel" signs up with his phone number.
+- **Selection:** He selects the category **Science** and the sub-category **Space**.
+- **Prompt:** He enters: *"Teach me about black holes."*
+- **Result:** The system sends the context to OpenAI, returns a structured lesson, and stores it in Israel's history for future review.
+
+## 💡 Assumptions Made
+- **Connectivity:** The system requires an active internet connection to interact with the OpenAI API.
+- **PDF Format:** The current PDF extraction service supports text-based PDFs. Image-based PDFs (scans) are handled with a user-friendly error message.
+- **User Session:** For this MVP, user identification is managed via `localStorage` after a simple registration/login flow.
+- **AI Model:** The system is optimized for `gpt-4o` to ensure high-quality educational content and structured JSON outputs.

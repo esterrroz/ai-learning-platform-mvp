@@ -1,54 +1,27 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f5f5;
-}
-
-/* Hebrew RTL — switch to a font that renders Hebrew well */
-[dir="rtl"] body {
-  font-family: 'Segoe UI', Arial, 'Arial Hebrew', sans-serif;
-}
-
-#root {
-  width: 100%;
-  min-height: 100vh;
-}
-
 .App {
   min-height: 100vh;
   display: flex;
-  background: #f5f5f5;
+  background: var(--bg);
 }
 
 .app-main {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 260px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg);
+  transition: margin-left 0.3s ease;
 }
 
-/* RTL — sidebar is on the right, main content shifts left margin to right */
 [dir="rtl"] .app-main {
   margin-left: 0;
-  margin-right: 280px;
+  margin-right: 260px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .app-main {
     margin-left: 0;
   }
-
   [dir="rtl"] .app-main {
     margin-right: 0;
-  }
-
-  .App {
-    flex-direction: column;
   }
 }
