@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { summarizeText, generateQuizFromSummary } from '../services/api';
+import { summarizeText, generateQuizFromSummary, saveMaterial } from '../services/api';
 import '../styles/Dashboard.css';
 
 export default function Dashboard() {
@@ -9,7 +9,9 @@ export default function Dashboard() {
   const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(false);
   const [quizLoading, setQuizLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleSummarize = async () => {
     if (!inputText.trim()) {
@@ -49,6 +51,38 @@ export default function Dashboard() {
       setError(err.toString());
     } finally {
       setQuizLoading(false);
+    }
+  };
+
+  const handleSaveMaterial = async () => {
+    if (!inputText.trim() || !summary) {
+      setError('Please generate a summary first before saving');
+      return;
+    }
+
+    setSaving(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const title = inputText.substring(0, 50) + (inputText.length > 50 ? '...' : '');
+      const result = await saveMaterial(
+        title,
+        inputText,
+        summary,
+        quiz || null
+      );
+      
+      setSuccess('✅ Material saved successfully!');
+      // Reset after 2 seconds
+      setTimeout(() => {
+        handleClear();
+        setSuccess('');
+      }, 2000);
+    } catch (err) {
+      setError('Failed to save material: ' + err.toString());
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -135,6 +169,11 @@ export default function Dashboard() {
                     <p>❌ Error: {error}</p>
                   </div>
                 )}
+                {success && (
+                  <div className="success-box">
+                    <p>{success}</p>
+                  </div>
+                )}
                 {summary && (
                   <div className="summary-box">
                     <p>{summary}</p>
@@ -145,6 +184,13 @@ export default function Dashboard() {
                         disabled={quizLoading || !summary}
                       >
                         {quizLoading ? 'Generating Quiz...' : '🎯 Generate Quiz'}
+                      </button>
+                      <button
+                        className="btn btn-success"
+                        onClick={handleSaveMaterial}
+                        disabled={saving || !summary}
+                      >
+                        {saving ? 'Saving...' : '💾 Save Material'}
                       </button>
                     </div>
                   </div>
