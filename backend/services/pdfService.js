@@ -1,8 +1,5 @@
 const pdfParse = require('pdf-parse');
 
-const IMAGE_PDF_MESSAGE =
-  'This PDF seems to be an image. Please upload a text-based PDF or copy-paste the text.';
-
 const extractTextFromPDF = async (fileBuffer) => {
   if (!fileBuffer || fileBuffer.length === 0) {
     console.error('[pdfService] ❌ No file buffer provided');
@@ -18,25 +15,30 @@ const extractTextFromPDF = async (fileBuffer) => {
     console.error('[pdfService] ❌ pdf-parse threw an error:');
     console.error('  message :', parseError.message);
     console.error('  stack   :', parseError.stack);
-    // pdf-parse can throw on encrypted / corrupted files
-    throw new Error(IMAGE_PDF_MESSAGE);
+
+    if (parseError.message?.toLowerCase().includes('encrypt')) {
+      throw new Error('This PDF is password-protected. Please remove the password and try again.');
+    }
+    throw new Error('Could not read this PDF. The file may be corrupted or in an unsupported format.');
   }
 
   console.log(`[pdfService] 📊 Pages: ${data.numpages} | Raw text length: ${data.text?.length ?? 0}`);
 
   const rawText = data.text ?? '';
 
-  // Count meaningful characters (letters + digits) to distinguish real text from
-  // whitespace-only or symbol-only output that image-based PDFs sometimes produce
   const meaningfulChars = (rawText.match(/[\p{L}\p{N}]/gu) ?? []).length;
   console.log(`[pdfService] 🔤 Meaningful characters found: ${meaningfulChars}`);
 
-  if (meaningfulChars < 20) {
+  if (meaningfulChars < 5) {
     console.error(
       `[pdfService] ❌ Not enough text extracted (${meaningfulChars} meaningful chars). ` +
-      'PDF is likely image-based, scanned, or encrypted.'
+      'PDF is likely image-based or scanned.'
     );
-    throw new Error(IMAGE_PDF_MESSAGE);
+    throw new Error(
+      'No text could be extracted from this PDF. ' +
+      'It appears to be a scanned document or image-based PDF. ' +
+      'Please copy-paste the text directly instead.'
+    );
   }
 
   // Preserve paragraph breaks (double newline → placeholder → restore)

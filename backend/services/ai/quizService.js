@@ -10,7 +10,8 @@ const generateQuizFromSummary = async (summary) => {
       throw new Error('OPENAI_API_KEY is not set in environment variables');
     }
 
-    const systemPrompt = `You are an expert quiz generator. Create 3 engaging and educational multiple-choice quiz questions based on the provided summary. 
+    const systemPrompt = `You are an expert academic quiz generator specializing in English, Mathematics, History, Biology, and Grammar.
+Create 3 rigorous multiple-choice quiz questions based on the provided academic summary.
 Format your response as a JSON array with the following structure:
 [
   {

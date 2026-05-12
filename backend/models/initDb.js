@@ -59,18 +59,30 @@ const DDL = [
   )`,
 ];
 
-const CATEGORY_SEEDS = ['Programming', 'Languages', 'Cooking'];
+const CATEGORY_SEEDS = [
+  'English',
+  'Mathematics',
+  'History',
+  'Biology',
+  'Grammar',
+];
 
 const SUB_CATEGORY_SEEDS = [
-  { name: 'JavaScript',      category: 'Programming' },
-  { name: 'Python',          category: 'Programming' },
-  { name: 'Web Development', category: 'Programming' },
-  { name: 'English',         category: 'Languages'   },
-  { name: 'Spanish',         category: 'Languages'   },
-  { name: 'French',          category: 'Languages'   },
-  { name: 'Italian Cuisine', category: 'Cooking'     },
-  { name: 'Asian Cuisine',   category: 'Cooking'     },
-  { name: 'Baking',          category: 'Cooking'     },
+  { name: 'Grammar',        category: 'English'     },
+  { name: 'Vocabulary',     category: 'English'     },
+  { name: 'Literature',     category: 'English'     },
+  { name: 'Algebra',        category: 'Mathematics' },
+  { name: 'Geometry',       category: 'Mathematics' },
+  { name: 'Calculus',       category: 'Mathematics' },
+  { name: 'Ancient History',category: 'History'     },
+  { name: 'Modern History', category: 'History'     },
+  { name: 'World Wars',     category: 'History'     },
+  { name: 'Human Anatomy',  category: 'Biology'     },
+  { name: 'Genetics',       category: 'Biology'     },
+  { name: 'Ecosystems',     category: 'Biology'     },
+  { name: 'Syntax',         category: 'Grammar'     },
+  { name: 'Punctuation',    category: 'Grammar'     },
+  { name: 'Parts of Speech',category: 'Grammar'     },
 ];
 
 const initDb = async () => {
@@ -87,6 +99,14 @@ const initDb = async () => {
     await client.query(
       `ALTER TABLE materials ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`
     );
+
+    // Remove legacy categories that are no longer part of the academic curriculum.
+    // ON DELETE CASCADE on sub_categories and prompts handles child rows automatically.
+    const legacyCategories = ['Programming', 'Languages', 'Cooking'];
+    for (const name of legacyCategories) {
+      await client.query('DELETE FROM categories WHERE name = $1', [name]);
+    }
+    console.log('🗑️  Legacy categories removed (if they existed)');
 
     // Seed categories (idempotent via UNIQUE name constraint)
     for (const name of CATEGORY_SEEDS) {

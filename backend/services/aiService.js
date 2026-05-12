@@ -4,6 +4,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const ACADEMIC_SUBJECTS = 'English, Mathematics, History, Biology, and Grammar';
+
+const ACADEMIC_SYSTEM_BASE = `You are an academic learning assistant specialized in the following subjects: ${ACADEMIC_SUBJECTS}.
+You provide clear, accurate, and educationally sound content suitable for students and learners.
+Always maintain a professional and academic tone. Do not engage with topics outside these academic subjects.`;
+
 const summarizeText = async (text) => {
   try {
     if (!process.env.OPENAI_API_KEY) {
@@ -15,11 +21,12 @@ const summarizeText = async (text) => {
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful assistant that summarizes text concisely and clearly.',
+          content: `${ACADEMIC_SYSTEM_BASE}
+Your task is to summarize academic texts concisely and clearly, preserving key concepts, definitions, and important facts.`,
         },
         {
           role: 'user',
-          content: `Please summarize the following text in 2-3 sentences:\n\n${text}`,
+          content: `Please summarize the following academic text in 2-3 sentences:\n\n${text}`,
         },
       ],
       max_tokens: 150,
@@ -39,10 +46,11 @@ const generateQuiz = async (category, subCategory, prompt) => {
       throw new Error('OPENAI_API_KEY is not set in environment variables');
     }
 
-    const systemPrompt = `You are an expert quiz generator. Create engaging and educational quiz questions based on the given category, subcategory, and custom prompt. 
-Format your response as a numbered list with clear questions. Include difficulty indicators (Easy/Medium/Hard) for each question if appropriate.`;
+    const systemPrompt = `${ACADEMIC_SYSTEM_BASE}
+You are an expert academic quiz generator. Create engaging and rigorous quiz questions based on the given subject, sub-topic, and student request.
+Format your response as a numbered list with clear questions. Include difficulty indicators (Easy/Medium/Hard) for each question.`;
 
-    const userPrompt = `Category: ${category}\nSubcategory: ${subCategory}\n\nUser Request: ${prompt}`;
+    const userPrompt = `Subject: ${category}\nTopic: ${subCategory}\n\nStudent Request: ${prompt}`;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
@@ -73,25 +81,25 @@ const generateLesson = async (category, subCategory, prompt) => {
       throw new Error('OPENAI_API_KEY is not set in environment variables');
     }
 
-    const systemPrompt = `You are an expert educator and teacher. Create comprehensive, engaging, and well-structured lessons that are lesson-like in nature.
-Your lessons should:
-1. Start with an introduction to the topic
-2. Provide clear explanations with examples
-3. Include key concepts and definitions
-4. Organize content with headers and sections
-5. Use a friendly and approachable tone
-6. Include practical applications or use cases
-7. Provide learning objectives if relevant
-8. End with a summary or key takeaways
+    const systemPrompt = `${ACADEMIC_SYSTEM_BASE}
+You are an expert academic educator. Create comprehensive, well-structured lessons for the given subject and topic.
+Your lessons must:
+1. Start with clear learning objectives
+2. Provide accurate academic explanations with examples
+3. Include key concepts, definitions, and terminology
+4. Organize content with clear headers and sections
+5. Use a professional and academic tone
+6. Include real-world academic applications where relevant
+7. End with a summary of key takeaways
 
-Format your response in a clear, readable manner using markdown-style formatting with line breaks between sections.`;
+Format your response using markdown-style formatting with line breaks between sections.`;
 
-    const userPrompt = `Category: ${category}
-Sub-Category: ${subCategory}
+    const userPrompt = `Subject: ${category}
+Topic: ${subCategory}
 
-User Request: ${prompt}
+Student Request: ${prompt}
 
-Please create a comprehensive lesson covering this topic.`;
+Please create a comprehensive academic lesson covering this topic.`;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
