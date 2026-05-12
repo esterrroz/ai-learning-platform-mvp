@@ -389,3 +389,15 @@ To demonstrate the platform's flow:
 - **PDF Format:** The current PDF extraction service supports text-based PDFs. Image-based PDFs (scans) are handled with a user-friendly error message.
 - **User Session:** For this MVP, user identification is managed via `localStorage` after a simple registration/login flow.
 - **AI Model:** The system is optimized for `gpt-4o` to ensure high-quality educational content and structured JSON outputs.
+
+🚀 Beyond the Requirements (Bonuses Included)
+While the task required a basic MVP, I implemented several production-grade features:
+
+Multi-language Support (i18n): Full Hebrew & English support with RTL/LTR layout switching.
+
+PDF Extraction: Users can upload PDFs to generate summaries and lessons.
+
+Advanced UI/UX: Custom-designed navigation cards and modern Glassmorphism-style buttons.
+* Dockerized Environment: The entire database setup is automated via Docker Compose.  
+
+Quiz System: An interactive quiz generator based on the AI lesson content.

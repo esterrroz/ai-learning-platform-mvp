@@ -71,7 +71,8 @@
     "tools": "כלים",
     "summarizer": "מיכל תקציר",
     "lessonGenerator": "יוצר שיעורים",
-    "adminPanel": "פאנל ניהול"
+    "adminPanel": "פאנל ניהול",
+    "learningHistory": "היסטוריית למידה"
   },
   "dashboard": {
     "aiLearningPlatform": "פלטפורמת למידה בעזרת בינה מלאכותית",
@@ -151,6 +152,15 @@
     "incorrect": "לא נכון",
     "score": "ניקוד",
     "completed": "החידון הושלם"
+  },
+  "history": {
+    "title": "היסטוריית למידה",
+    "subtitle": "כל מפגשי הלמידה הקודמים שלך",
+    "totalSessions": "סך הכל מפגשים",
+    "empty": "אין עדיין מפגשי למידה. התחל ביצירת שיעור או תקציר!",
+    "error": "טעינת ההיסטוריה נכשלה.",
+    "showResponse": "הצג תשובה ▾",
+    "hideResponse": "הסתר תשובה ▴"
   },
   "common": {
     "error": "שגיאה",

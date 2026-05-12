@@ -71,7 +71,8 @@
     "tools": "Tools",
     "summarizer": "Summarizer",
     "lessonGenerator": "Lesson Generator",
-    "adminPanel": "Admin Panel"
+    "adminPanel": "Admin Panel",
+    "learningHistory": "Learning History"
   },
   "dashboard": {
     "aiLearningPlatform": "AI Learning Platform",
@@ -151,6 +152,15 @@
     "incorrect": "Incorrect",
     "score": "Score",
     "completed": "Quiz Completed"
+  },
+  "history": {
+    "title": "Learning History",
+    "subtitle": "All your past learning sessions",
+    "totalSessions": "Total Sessions",
+    "empty": "No learning sessions yet. Start by generating a lesson or summary!",
+    "error": "Failed to load your history.",
+    "showResponse": "Show Response ▾",
+    "hideResponse": "Hide Response ▴"
   },
   "common": {
     "error": "Error",

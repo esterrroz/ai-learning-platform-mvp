@@ -18,23 +18,7 @@
 .header-info h1 { font-size: 1.6rem; margin: 0 0 4px; }
 .header-info p  { font-size: 0.9rem; color: var(--text-muted); margin: 0; }
 
-.btn-back {
-  background: var(--surface);
-  color: var(--accent);
-  border: 1.5px solid var(--accent-border);
-  padding: 9px 18px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
 
-.btn-back:hover {
-  background: var(--accent-light);
-  transform: translateY(-1px);
-}
 
 /* Progress */
 .progress-section { max-width: 900px; margin: 0 auto 28px; }
@@ -170,44 +154,7 @@
   align-items: center;
 }
 
-.btn-nav {
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 10px 16px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
 
-.btn-nav:hover:not(:disabled) {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-  transform: translateY(-1px);
-}
-
-.btn-nav:disabled { opacity: 0.4; cursor: not-allowed; }
-
-.btn-finish {
-  background: #059669;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-finish:hover:not(:disabled) {
-  background: #047857;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(5,150,105,.25);
-}
-
-.btn-finish:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* Indicators */
 .question-indicators { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
@@ -347,25 +294,7 @@
 
 .result-correct { color: #166534; font-weight: 500; }
 
-.btn-back-home {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 13px 36px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.95rem;
-  margin-top: 28px;
-  width: 100%;
-}
 
-.btn-back-home:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(124,58,237,.25);
-}
 
 /* Scrollbar */
 .table-container::-webkit-scrollbar { width: 5px; }

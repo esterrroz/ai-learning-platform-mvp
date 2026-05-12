@@ -1,5 +1,28 @@
 const { pool } = require('../config/db');
 
+const getUserPrompts = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!userId || isNaN(userId)) {
+      return res.status(400).json({ error: 'Invalid user ID.' });
+    }
+    const result = await pool.query(
+      `SELECT p.id, p.prompt, p.response, p.created_at,
+              c.name AS category_name, sc.name AS sub_category_name
+       FROM prompts p
+       LEFT JOIN categories c ON p.category_id = c.id
+       LEFT JOIN sub_categories sc ON p.sub_category_id = sc.id
+       WHERE p.user_id = $1
+       ORDER BY p.created_at DESC`,
+      [userId]
+    );
+    res.status(200).json({ prompts: result.rows, count: result.rows.length });
+  } catch (error) {
+    console.error('[userController] getUserPrompts error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch user prompts.' });
+  }
+};
+
 const getPrompts = async (req, res) => {
   try {
     const result = await pool.query(`
@@ -59,4 +82,4 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, getUsers, getPrompts };
+module.exports = { registerUser, getUsers, getPrompts, getUserPrompts };

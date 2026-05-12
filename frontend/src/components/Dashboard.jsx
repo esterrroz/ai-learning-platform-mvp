@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [showLessonSection, setShowLessonSection] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const userId = localStorage.getItem('userId');
 
   // Fetch categories on mount
   useEffect(() => {
@@ -238,24 +239,24 @@ export default function Dashboard() {
         <nav className="sidebar-nav">
           <button
             className={`nav-item ${activeTab === 'materials' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('materials');
-              handleQuizClear();
-            }}
+            onClick={() => { setActiveTab('materials'); handleQuizClear(); }}
           >
-            📝 My Materials
+            <span className="nav-icon">📝</span>
+            My Materials
           </button>
           <button
             className={`nav-item ${activeTab === 'lesson' ? 'active' : ''}`}
             onClick={() => setActiveTab('lesson')}
           >
-            🎓 Lesson Generator
+            <span className="nav-icon">🎓</span>
+            Lesson Generator
           </button>
           <button
             className={`nav-item ${activeTab === 'study' ? 'active' : ''}`}
             onClick={() => setActiveTab('study')}
           >
-            📚 Study Hub
+            <span className="nav-icon">📚</span>
+            Study Hub
           </button>
         </nav>
       </aside>

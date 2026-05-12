@@ -11,6 +11,15 @@ export const registerUser = async (name, phone) => {
   }
 };
 
+export const getUserPrompts = async (userId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/users/${userId}/prompts`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
 export const getPrompts = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users/prompts`);

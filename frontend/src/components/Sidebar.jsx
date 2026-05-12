@@ -63,6 +63,10 @@ export default function Sidebar({ userName }) {
               <span className="link-icon">🎯</span>
               <span className="link-text">{t('sidebar.lessonGenerator')}</span>
             </Link>
+            <Link to="/history" className={`sidebar-link ${isActive('/history') ? 'active' : ''}`} onClick={close}>
+              <span className="link-icon">📖</span>
+              <span className="link-text">{t('sidebar.learningHistory')}</span>
+            </Link>
             <Link to="/admin" className={`sidebar-link ${isActive('/admin') ? 'active' : ''}`} onClick={close}>
               <span className="link-icon">🛡️</span>
               <span className="link-text">{t('sidebar.adminPanel')}</span>
