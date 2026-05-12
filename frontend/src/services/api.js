@@ -36,10 +36,11 @@ export const uploadPDF = async (file) => {
   }
 };
 
-export const summarizeText = async (text) => {
+export const summarizeText = async (text, userId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/summarize`, {
       text,
+      userId,
     });
     return response.data;
   } catch (error) {
@@ -78,12 +79,13 @@ export const generateQuizForMaterialById = async (materialId) => {
   }
 };
 
-export const generateQuiz = async (category, subCategory, prompt) => {
+export const generateQuiz = async (category, subCategory, prompt, userId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/generateQuiz`, {
       category,
       subCategory,
       prompt,
+      userId,
     });
     return response.data;
   } catch (error) {
@@ -91,12 +93,13 @@ export const generateQuiz = async (category, subCategory, prompt) => {
   }
 };
 
-export const generateLessonPrompt = async (category, subCategory, prompt) => {
+export const generateLessonPrompt = async (category, subCategory, prompt, userId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/generateLesson`, {
       category,
       subCategory,
       prompt,
+      userId,
     });
     return response.data;
   } catch (error) {
@@ -140,13 +143,14 @@ export const getMaterial = async (id) => {
   }
 };
 
-export const saveMaterial = async (title, original_text, summary, quiz) => {
+export const saveMaterial = async (title, original_text, summary, quiz, userId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials`, {
       title,
       original_text,
       summary,
       quiz,
+      userId,
     });
     return response.data;
   } catch (error) {

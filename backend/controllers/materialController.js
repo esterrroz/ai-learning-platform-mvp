@@ -33,7 +33,7 @@ const extractPDF = (req, res) => {
 
 const summarize = async (req, res) => {
   try {
-    const { text } = req.body;
+    const { text, userId } = req.body;
 
     if (!text || typeof text !== 'string' || text.trim().length === 0) {
       return res.status(400).json({ error: 'Text is required and cannot be empty.' });
@@ -43,6 +43,14 @@ const summarize = async (req, res) => {
     }
 
     const summary = await summarizeText(text);
+
+    if (userId && !isNaN(userId)) {
+      pool.query(
+        'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, 1, 1, $2, $3)',
+        [userId, text.substring(0, 500), summary]
+      ).catch(err => console.error('[materialController] prompt log error:', err.message));
+    }
+
     res.status(200).json({ summary, original_length: text.length, timestamp: new Date().toISOString() });
   } catch (error) {
     console.error('[materialController] summarize error:', error.message);
@@ -52,7 +60,7 @@ const summarize = async (req, res) => {
 
 const generateQuizFromPrompt = async (req, res) => {
   try {
-    const { category, subCategory, prompt } = req.body;
+    const { category, subCategory, prompt, userId } = req.body;
 
     if (!category || !subCategory || !prompt) {
       return res.status(400).json({ error: 'Missing required fields: category, subCategory, prompt.' });
@@ -62,6 +70,14 @@ const generateQuizFromPrompt = async (req, res) => {
     }
 
     const quiz = await generateQuiz(category, subCategory, prompt);
+
+    if (userId && !isNaN(userId)) {
+      pool.query(
+        'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, 1, 1, $2, $3)',
+        [userId, prompt, JSON.stringify(quiz)]
+      ).catch(err => console.error('[materialController] prompt log error:', err.message));
+    }
+
     res.status(200).json({ quiz, category, subCategory, timestamp: new Date().toISOString() });
   } catch (error) {
     console.error('[materialController] generateQuizFromPrompt error:', error.message);
@@ -71,7 +87,7 @@ const generateQuizFromPrompt = async (req, res) => {
 
 const generateLessonFromPrompt = async (req, res) => {
   try {
-    const { category, subCategory, prompt } = req.body;
+    const { category, subCategory, prompt, userId } = req.body;
 
     if (!category || !subCategory || !prompt) {
       return res.status(400).json({ error: 'Missing required fields: category, subCategory, prompt.' });
@@ -81,6 +97,14 @@ const generateLessonFromPrompt = async (req, res) => {
     }
 
     const lesson = await generateLesson(category, subCategory, prompt);
+
+    if (userId && !isNaN(userId)) {
+      pool.query(
+        'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, 1, 1, $2, $3)',
+        [userId, prompt, lesson]
+      ).catch(err => console.error('[materialController] prompt log error:', err.message));
+    }
+
     res.status(200).json({ lesson, category, subCategory, timestamp: new Date().toISOString() });
   } catch (error) {
     console.error('[materialController] generateLessonFromPrompt error:', error.message);
@@ -134,15 +158,15 @@ const getMaterialById = async (req, res) => {
 
 const saveMaterial = async (req, res) => {
   try {
-    const { title, original_text, summary, quiz } = req.body;
+    const { title, original_text, summary, quiz, userId } = req.body;
 
     if (!title?.trim() || !original_text?.trim()) {
       return res.status(400).json({ error: 'title and original_text are required.' });
     }
 
     const result = await pool.query(
-      'INSERT INTO materials (title, original_text, summary, quiz) VALUES ($1, $2, $3, $4) RETURNING *',
-      [title.trim(), original_text.trim(), summary || null, quiz ? JSON.stringify(quiz) : null]
+      'INSERT INTO materials (user_id, title, original_text, summary, quiz) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [userId || null, title.trim(), original_text.trim(), summary || null, quiz ? JSON.stringify(quiz) : null]
     );
 
     res.status(201).json({ material: result.rows[0], message: 'Material saved successfully.' });

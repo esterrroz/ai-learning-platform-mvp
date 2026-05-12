@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS prompts (
 -- Create Materials table (for storing summarized texts and generated quizzes)
 CREATE TABLE IF NOT EXISTS materials (
   id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
   title VARCHAR(500) NOT NULL,
   original_text TEXT NOT NULL,
   summary TEXT,

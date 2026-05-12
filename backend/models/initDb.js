@@ -41,6 +41,7 @@ const DDL = [
 
   `CREATE TABLE IF NOT EXISTS materials (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     title VARCHAR(500) NOT NULL,
     original_text TEXT NOT NULL,
     summary TEXT,
@@ -81,6 +82,11 @@ const initDb = async () => {
     for (const stmt of DDL) {
       await client.query(stmt);
     }
+
+    // Migrations: add columns that may not exist in older installs
+    await client.query(
+      `ALTER TABLE materials ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`
+    );
 
     // Seed categories (idempotent via UNIQUE name constraint)
     for (const name of CATEGORY_SEEDS) {

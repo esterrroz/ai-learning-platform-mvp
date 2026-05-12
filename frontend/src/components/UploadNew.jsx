@@ -3,6 +3,7 @@ import { summarizeText, generateQuizFromSummary, saveMaterial } from '../service
 import '../styles/UploadNew.css';
 
 export default function UploadNew() {
+  const userId = localStorage.getItem('userId');
   const [inputText, setInputText] = useState('');
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
@@ -24,7 +25,7 @@ export default function UploadNew() {
     setQuiz(null);
 
     try {
-      const result = await summarizeText(inputText);
+      const result = await summarizeText(inputText, userId);
       setSummary(result.summary || result);
     } catch (err) {
       setError(err.toString());
@@ -69,7 +70,7 @@ export default function UploadNew() {
     setSuccess('');
 
     try {
-      await saveMaterial(title, inputText, summary || null, quiz || null);
+      await saveMaterial(title, inputText, summary || null, quiz || null, userId);
       setSuccess('✅ Material saved to library successfully!');
       
       // Reset form after 2 seconds
