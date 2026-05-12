@@ -45,10 +45,13 @@ const summarize = async (req, res) => {
     const summary = await summarizeText(text);
 
     if (userId && !isNaN(userId)) {
-      pool.query(
-        'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, 1, 1, $2, $3)',
-        [userId, text.substring(0, 500), summary]
-      ).catch(err => console.error('[materialController] prompt log error:', err.message));
+      const { categoryId, subCategoryId } = req.body;
+      if (categoryId && subCategoryId && !isNaN(categoryId) && !isNaN(subCategoryId)) {
+        pool.query(
+          'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, $2, $3, $4, $5)',
+          [userId, categoryId, subCategoryId, text.substring(0, 500), summary]
+        ).catch(err => console.error('[materialController] prompt log error:', err.message));
+      }
     }
 
     res.status(200).json({ summary, original_length: text.length, timestamp: new Date().toISOString() });
@@ -72,10 +75,13 @@ const generateQuizFromPrompt = async (req, res) => {
     const quiz = await generateQuiz(category, subCategory, prompt);
 
     if (userId && !isNaN(userId)) {
-      pool.query(
-        'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, 1, 1, $2, $3)',
-        [userId, prompt, JSON.stringify(quiz)]
-      ).catch(err => console.error('[materialController] prompt log error:', err.message));
+      const { categoryId, subCategoryId } = req.body;
+      if (categoryId && subCategoryId && !isNaN(categoryId) && !isNaN(subCategoryId)) {
+        pool.query(
+          'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, $2, $3, $4, $5)',
+          [userId, categoryId, subCategoryId, prompt, JSON.stringify(quiz)]
+        ).catch(err => console.error('[materialController] prompt log error:', err.message));
+      }
     }
 
     res.status(200).json({ quiz, category, subCategory, timestamp: new Date().toISOString() });
@@ -99,10 +105,13 @@ const generateLessonFromPrompt = async (req, res) => {
     const lesson = await generateLesson(category, subCategory, prompt);
 
     if (userId && !isNaN(userId)) {
-      pool.query(
-        'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, 1, 1, $2, $3)',
-        [userId, prompt, lesson]
-      ).catch(err => console.error('[materialController] prompt log error:', err.message));
+      const { categoryId, subCategoryId } = req.body;
+      if (categoryId && subCategoryId && !isNaN(categoryId) && !isNaN(subCategoryId)) {
+        pool.query(
+          'INSERT INTO prompts (user_id, category_id, sub_category_id, prompt, response) VALUES ($1, $2, $3, $4, $5)',
+          [userId, categoryId, subCategoryId, prompt, lesson]
+        ).catch(err => console.error('[materialController] prompt log error:', err.message));
+      }
     }
 
     res.status(200).json({ lesson, category, subCategory, timestamp: new Date().toISOString() });

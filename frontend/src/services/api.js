@@ -1,10 +1,19 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export const registerUser = async (name, phone) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/users`, { name, phone });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
+export const getPrompts = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/users/prompts`);
     return response.data;
   } catch (error) {
     throw error.response?.data?.error || error.message;
@@ -36,11 +45,13 @@ export const uploadPDF = async (file) => {
   }
 };
 
-export const summarizeText = async (text, userId) => {
+export const summarizeText = async (text, userId, categoryId, subCategoryId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/summarize`, {
       text,
       userId,
+      categoryId,
+      subCategoryId,
     });
     return response.data;
   } catch (error) {
@@ -93,13 +104,15 @@ export const generateQuiz = async (category, subCategory, prompt, userId) => {
   }
 };
 
-export const generateLessonPrompt = async (category, subCategory, prompt, userId) => {
+export const generateLessonPrompt = async (category, subCategory, prompt, userId, categoryId, subCategoryId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/generateLesson`, {
       category,
       subCategory,
       prompt,
       userId,
+      categoryId,
+      subCategoryId,
     });
     return response.data;
   } catch (error) {

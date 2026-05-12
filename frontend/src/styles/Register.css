@@ -9,6 +9,17 @@
   padding: 20px;
 }
 
+.register-lang-switcher {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+[dir="rtl"] .register-lang-switcher {
+  right: auto;
+  left: 16px;
+}
+
 .register-card {
   background: var(--surface);
   border-radius: var(--radius-lg);

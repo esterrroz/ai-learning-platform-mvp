@@ -1,5 +1,24 @@
 const { pool } = require('../config/db');
 
+const getPrompts = async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT p.id, p.prompt, p.response, p.created_at,
+             u.name AS user_name, u.phone AS user_phone,
+             c.name AS category_name, sc.name AS sub_category_name
+      FROM prompts p
+      LEFT JOIN users u ON p.user_id = u.id
+      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN sub_categories sc ON p.sub_category_id = sc.id
+      ORDER BY p.created_at DESC
+    `);
+    res.status(200).json({ prompts: result.rows, count: result.rows.length });
+  } catch (error) {
+    console.error('[userController] getPrompts error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch prompts.' });
+  }
+};
+
 const registerUser = async (req, res) => {
   try {
     const { name, phone } = req.body;
@@ -40,4 +59,4 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, getUsers };
+module.exports = { registerUser, getUsers, getPrompts };

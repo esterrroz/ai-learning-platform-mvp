@@ -69,7 +69,7 @@ export default function Dashboard() {
     setQuiz(null);
 
     try {
-      const result = await summarizeText(inputText);
+      const result = await summarizeText(inputText, userId, selectedCategory, selectedSubCategory);
       setSummary(result.summary || result);
     } catch (err) {
       setError(err.toString());
@@ -209,7 +209,7 @@ export default function Dashboard() {
       const categoryName = categories.find(c => c.id === parseInt(selectedCategory))?.name || '';
       const subCategoryName = subCategories.find(sc => sc.id === parseInt(selectedSubCategory))?.name || '';
 
-      const result = await generateLessonPrompt(categoryName, subCategoryName, prompt);
+      const result = await generateLessonPrompt(categoryName, subCategoryName, prompt, userId, selectedCategory, selectedSubCategory);
       setLesson(result.lesson || result);
       setSuccess('✅ ' + t('common.success'));
       setTimeout(() => setSuccess(''), 3000);

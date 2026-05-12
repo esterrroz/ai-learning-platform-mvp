@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { registerUser } from '../services/api';
+import LanguageSwitcher from './LanguageSwitcher';
 import '../styles/Register.css';
 
 export default function Register({ onRegistered }) {
+  const { t } = useTranslation();
   const [name, setName]   = useState('');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
@@ -11,7 +14,7 @@ export default function Register({ onRegistered }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError('Please enter your name.');
+      setError(t('register.nameRequired'));
       return;
     }
 
@@ -32,18 +35,21 @@ export default function Register({ onRegistered }) {
 
   return (
     <div className="register-overlay">
+      <div className="register-lang-switcher">
+        <LanguageSwitcher />
+      </div>
       <div className="register-card">
         <div className="register-logo">📚</div>
-        <h1 className="register-title">AI Learning Platform</h1>
-        <p className="register-subtitle">Enter your details to get started</p>
+        <h1 className="register-title">{t('register.title')}</h1>
+        <p className="register-subtitle">{t('register.subtitle')}</p>
 
         <form className="register-form" onSubmit={handleSubmit}>
           <div className="register-field">
-            <label htmlFor="reg-name">Full Name *</label>
+            <label htmlFor="reg-name">{t('register.fullName')} *</label>
             <input
               id="reg-name"
               type="text"
-              placeholder="e.g. Sarah Cohen"
+              placeholder={t('register.namePlaceholder')}
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={loading}
@@ -52,11 +58,11 @@ export default function Register({ onRegistered }) {
           </div>
 
           <div className="register-field">
-            <label htmlFor="reg-phone">Phone (optional)</label>
+            <label htmlFor="reg-phone">{t('register.phone')}</label>
             <input
               id="reg-phone"
               type="tel"
-              placeholder="e.g. 050-1234567"
+              placeholder={t('register.phonePlaceholder')}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               disabled={loading}
@@ -66,7 +72,7 @@ export default function Register({ onRegistered }) {
           {error && <p className="register-error">❌ {error}</p>}
 
           <button className="register-btn" type="submit" disabled={loading}>
-            {loading ? 'Registering...' : "Let's Start Learning 🚀"}
+            {loading ? t('register.submitting') : t('register.submit')}
           </button>
         </form>
       </div>

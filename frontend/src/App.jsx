@@ -8,6 +8,7 @@ import UploadNew from './components/UploadNew';
 import QuizGenerator from './components/QuizGenerator';
 import MyLibrary from './components/MyLibrary';
 import Register from './components/Register';
+import AdminPanel from './components/AdminPanel';
 import './App.css';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
               <Route path="/library"   element={<MyLibrary />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/quiz"      element={<QuizGenerator />} />
+              <Route path="/admin"     element={<AdminPanel />} />
             </Routes>
           </main>
         </div>
