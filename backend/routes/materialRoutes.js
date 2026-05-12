@@ -24,6 +24,8 @@ router.post('/extract-pdf', (req, res) => {
         });
       }
 
+      console.log(`[extract-pdf] 📥 File received: "${req.file.originalname}" (${req.file.size} bytes)`);
+
       // Extract text from PDF
       const result = await extractTextFromPDF(req.file.buffer);
 
@@ -35,8 +37,9 @@ router.post('/extract-pdf', (req, res) => {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Error extracting PDF:', error.message);
-      res.status(500).json({
+      const isUserError = error.message?.includes('image') || error.message?.includes('No file buffer');
+      console.error(`[extract-pdf] ❌ ${isUserError ? 'User error' : 'Server error'}: ${error.message}`);
+      res.status(isUserError ? 422 : 500).json({
         error: error.message || 'Failed to extract text from PDF',
       });
     }
