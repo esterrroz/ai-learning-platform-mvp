@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getMaterials, generateQuizFromSummary } from '../services/api';
+import { getMaterials, generateQuizFromSummary, generateQuizForMaterialById } from '../services/api';
 import QuizTaking from './QuizTaking';
 import '../styles/QuizGenerator.css';
 
@@ -16,6 +16,21 @@ export default function QuizGenerator() {
   // Fetch materials on component mount
   useEffect(() => {
     fetchMaterials();
+    // Check for a quiz passed from the Dashboard via sessionStorage
+    const pending = sessionStorage.getItem('pendingQuiz');
+    const pendingTitle = sessionStorage.getItem('pendingQuizTitle');
+    if (pending) {
+      try {
+        const questions = JSON.parse(pending);
+        setQuiz(questions);
+        setTakingQuiz(true);
+        if (pendingTitle) {
+          setSelectedMaterial({ title: pendingTitle, summary: null });
+        }
+      } catch (_) {}
+      sessionStorage.removeItem('pendingQuiz');
+      sessionStorage.removeItem('pendingQuizTitle');
+    }
   }, []);
 
   const fetchMaterials = async () => {
@@ -50,8 +65,16 @@ export default function QuizGenerator() {
     setTakingQuiz(false);
 
     try {
-      const result = await generateQuizFromSummary(selectedMaterial.summary);
-      setQuiz(result.quiz || result);
+      // Use the DB-persisted route if material has an id, otherwise fall back
+      let questions;
+      if (selectedMaterial.id) {
+        const result = await generateQuizForMaterialById(selectedMaterial.id);
+        questions = result.quiz || result;
+      } else {
+        const result = await generateQuizFromSummary(selectedMaterial.summary);
+        questions = result.quiz || result;
+      }
+      setQuiz(questions);
     } catch (err) {
       setError(err.toString());
       console.error('Error generating quiz:', err);

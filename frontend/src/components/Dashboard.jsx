@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { summarizeText, generateQuizFromSummary, saveMaterial, uploadPDF } from '../services/api';
-import QuizTaking from './QuizTaking';
 import '../styles/Dashboard.css';
 
 export default function Dashboard() {
@@ -8,12 +8,12 @@ export default function Dashboard() {
   const [inputText, setInputText] = useState('');
   const [summary, setSummary] = useState('');
   const [quiz, setQuiz] = useState(null);
-  const [takingQuiz, setTakingQuiz] = useState(false);
   const [loading, setLoading] = useState(false);
   const [quizLoading, setQuizLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   const handleSummarize = async () => {
     if (!inputText.trim()) {
@@ -87,22 +87,17 @@ export default function Dashboard() {
 
     try {
       const result = await generateQuizFromSummary(summary);
-      setQuiz(result.quiz || result);
+      const questions = result.quiz || result;
+      setQuiz(questions);
+      // Store quiz in sessionStorage and navigate to Quiz Generator tab
+      sessionStorage.setItem('pendingQuiz', JSON.stringify(questions));
+      sessionStorage.setItem('pendingQuizTitle', inputText.substring(0, 60));
+      navigate('/quiz');
     } catch (err) {
       setError(err.toString());
     } finally {
       setQuizLoading(false);
     }
-  };
-
-  const handleStartQuiz = () => {
-    if (quiz) {
-      setTakingQuiz(true);
-    }
-  };
-
-  const handleExitQuiz = () => {
-    setTakingQuiz(false);
   };
 
   const handleSaveMaterial = async () => {
@@ -149,17 +144,6 @@ export default function Dashboard() {
     setError('');
   };
 
-  // If in quiz taking mode, show the interactive quiz
-  if (takingQuiz && quiz) {
-    return (
-      <QuizTaking
-        quiz={quiz}
-        materialTitle="Quiz: Test Your Knowledge"
-        onBack={handleExitQuiz}
-      />
-    );
-  }
-
   return (
     <div className="dashboard-wrapper">
       {/* Sidebar Navigation */}
@@ -188,7 +172,7 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="dashboard-content">
-        {activeTab === 'materials' && !takingQuiz && (
+        {activeTab === 'materials' && (
           <div className="dashboard">
             <div className="dashboard-header">
               <h1>📚 AI Learning Platform</h1>
@@ -286,56 +270,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Quiz Preview Display */}
-            {quiz && !takingQuiz && (
-              <div className="quiz-display">
-                <div className="quiz-header">
-                  <h2>📋 Quiz Questions</h2>
-                  <button className="btn btn-small" onClick={handleQuizClear}>
-                    ✕ Close
-                  </button>
-                </div>
-                <div className="quiz-preview">
-                  <p className="quiz-intro">
-                    You have <strong>{quiz.length} questions</strong> to answer.
-                  </p>
-                  <div className="quiz-content">
-                    {Array.isArray(quiz) && quiz.map((q, index) => (
-                      <div key={index} className="quiz-item">
-                        <div className="quiz-question">
-                          <span className="question-number">Q{index + 1}.</span>
-                          <span>{q.question}</span>
-                          {q.difficulty && (
-                            <span className={`difficulty difficulty-${q.difficulty.toLowerCase()}`}>
-                              {q.difficulty}
-                            </span>
-                          )}
-                        </div>
-                        <div className="quiz-options">
-                          {q.options && q.options.map((option, optIndex) => (
-                            <div
-                              key={optIndex}
-                              className="quiz-option"
-                            >
-                              <span className="option-letter">
-                                {String.fromCharCode(65 + optIndex)}.
-                              </span>
-                              <span>{option}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    className="btn btn-primary btn-start-quiz"
-                    onClick={handleStartQuiz}
-                  >
-                    ▶ Start Quiz
-                  </button>
-                </div>
-              </div>
-            )}
+
           </div>
         )}
 

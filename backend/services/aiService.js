@@ -11,7 +11,7 @@ const summarizeText = async (text) => {
     }
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
@@ -45,7 +45,7 @@ Format your response as a numbered list with clear questions. Include difficulty
     const userPrompt = `Category: ${category}\nSubcategory: ${subCategory}\n\nUser Request: ${prompt}`;
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
