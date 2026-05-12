@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getMaterials, deleteMaterial } from '../services/api';
+import QuizTaking from './QuizTaking';
 import '../styles/MyLibrary.css';
 
 export default function MyLibrary() {
@@ -8,6 +9,7 @@ export default function MyLibrary() {
   const [error, setError] = useState('');
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [takingQuiz, setTakingQuiz] = useState(false);
 
   useEffect(() => {
     fetchMaterials();
@@ -41,6 +43,16 @@ export default function MyLibrary() {
     }
   };
 
+  const handleStartQuiz = () => {
+    if (selectedMaterial && selectedMaterial.quiz) {
+      setTakingQuiz(true);
+    }
+  };
+
+  const handleExitQuiz = () => {
+    setTakingQuiz(false);
+  };
+
   const filteredMaterials = materials.filter(
     (material) =>
       material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,6 +68,17 @@ export default function MyLibrary() {
       minute: '2-digit',
     });
   };
+
+  // If in quiz taking mode, show the interactive quiz
+  if (takingQuiz && selectedMaterial && selectedMaterial.quiz) {
+    return (
+      <QuizTaking
+        quiz={selectedMaterial.quiz}
+        materialTitle={selectedMaterial.title}
+        onBack={handleExitQuiz}
+      />
+    );
+  }
 
   return (
     <div className="my-library">
@@ -194,7 +217,15 @@ export default function MyLibrary() {
                 {/* Quiz */}
                 {selectedMaterial.quiz && (
                   <div className="detail-section">
-                    <h3>🎯 Quiz</h3>
+                    <div className="quiz-header-with-button">
+                      <h3>🎯 Quiz</h3>
+                      <button
+                        className="btn btn-primary btn-study-quiz"
+                        onClick={handleStartQuiz}
+                      >
+                        ▶ Study This Quiz
+                      </button>
+                    </div>
                     <div className="quiz-display">
                       {Array.isArray(selectedMaterial.quiz) &&
                         selectedMaterial.quiz.map((q, index) => (

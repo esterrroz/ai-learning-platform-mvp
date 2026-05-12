@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
 const { pool, waitForDb } = require('./config/db');
 const initDb = require('./models/initDb');
 const materialRoutes = require('./routes/materialRoutes');
@@ -8,9 +10,32 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Configure multer for file uploads
+const storage = multer.memoryStorage(); // Store files in memory
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    // Only accept PDF files
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF files are allowed'), false);
+    }
+  },
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Make upload middleware available to routes
+app.use((req, res, next) => {
+  req.uploadPDF = upload.single('pdf');
+  next();
+});
 
 // Routes
 app.use('/api/materials', materialRoutes);

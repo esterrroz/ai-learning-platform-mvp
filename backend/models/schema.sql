@@ -47,6 +47,15 @@ CREATE TABLE IF NOT EXISTS materials (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create Quizzes table (for storing AI-generated quiz questions linked to materials)
+CREATE TABLE IF NOT EXISTS quizzes (
+  id SERIAL PRIMARY KEY,
+  material_id INTEGER NOT NULL REFERENCES materials(id) ON DELETE CASCADE,
+  questions JSONB NOT NULL,
+  score INTEGER,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Seed Data: Initial Categories
 INSERT INTO categories (name) VALUES
 ('Programming')

@@ -2,6 +2,22 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
+export const uploadPDF = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    const response = await axios.post(`${API_BASE_URL}/materials/extract-pdf`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
 export const summarizeText = async (text) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/summarize`, {
@@ -18,6 +34,26 @@ export const generateQuizFromSummary = async (summary) => {
     const response = await axios.post(`${API_BASE_URL}/materials/generate-quiz`, {
       summary,
     });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
+export const generateQuizForMaterial = async (materialId, summary) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/materials/${materialId}/quiz`, {
+      summary,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
+export const generateQuizForMaterialById = async (materialId) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/materials/${materialId}/generate-quiz`);
     return response.data;
   } catch (error) {
     throw error.response?.data?.error || error.message;

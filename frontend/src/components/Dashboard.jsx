@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { summarizeText, generateQuizFromSummary, saveMaterial } from '../services/api';
+import { summarizeText, generateQuizFromSummary, saveMaterial, uploadPDF } from '../services/api';
+import QuizTaking from './QuizTaking';
 import '../styles/Dashboard.css';
 
 export default function Dashboard() {
@@ -7,6 +8,7 @@ export default function Dashboard() {
   const [inputText, setInputText] = useState('');
   const [summary, setSummary] = useState('');
   const [quiz, setQuiz] = useState(null);
+  const [takingQuiz, setTakingQuiz] = useState(false);
   const [loading, setLoading] = useState(false);
   const [quizLoading, setQuizLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -34,6 +36,45 @@ export default function Dashboard() {
     }
   };
 
+  const handlePDFUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type || !file.type.includes('pdf')) {
+      setError('Please upload a valid PDF file');
+      return;
+    }
+
+    // Validate file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      setError('PDF file is too large. Maximum size is 10MB');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSummary('');
+    setQuiz(null);
+
+    try {
+      const result = await uploadPDF(file);
+      setInputText(result.text);
+      setSuccess(
+        `✅ PDF uploaded! Extracted ${result.characterCount} characters from ${result.pageCount} page(s).`
+      );
+      setTimeout(() => setSuccess(''), 3000);
+      
+      // Reset file input
+      event.target.value = '';
+    } catch (err) {
+      setError(err.toString());
+      event.target.value = '';
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleGenerateQuiz = async () => {
     if (!summary) {
       setError('Please generate a summary first');
@@ -52,6 +93,16 @@ export default function Dashboard() {
     } finally {
       setQuizLoading(false);
     }
+  };
+
+  const handleStartQuiz = () => {
+    if (quiz) {
+      setTakingQuiz(true);
+    }
+  };
+
+  const handleExitQuiz = () => {
+    setTakingQuiz(false);
   };
 
   const handleSaveMaterial = async () => {
@@ -98,6 +149,17 @@ export default function Dashboard() {
     setError('');
   };
 
+  // If in quiz taking mode, show the interactive quiz
+  if (takingQuiz && quiz) {
+    return (
+      <QuizTaking
+        quiz={quiz}
+        materialTitle="Quiz: Test Your Knowledge"
+        onBack={handleExitQuiz}
+      />
+    );
+  }
+
   return (
     <div className="dashboard-wrapper">
       {/* Sidebar Navigation */}
@@ -126,7 +188,7 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="dashboard-content">
-        {activeTab === 'materials' && (
+        {activeTab === 'materials' && !takingQuiz && (
           <div className="dashboard">
             <div className="dashboard-header">
               <h1>📚 AI Learning Platform</h1>
@@ -136,6 +198,8 @@ export default function Dashboard() {
             <div className="dashboard-container">
               <div className="input-section">
                 <h2>Input Text</h2>
+                
+                {/* Textarea */}
                 <textarea
                   className="textarea"
                   placeholder="Paste or type your text here..."
@@ -144,6 +208,25 @@ export default function Dashboard() {
                   rows="8"
                   disabled={loading || quizLoading}
                 />
+
+                {/* PDF Upload Section */}
+                <div className="pdf-upload-section">
+                  <label htmlFor="pdf-input" className="pdf-upload-label">
+                    <span className="pdf-icon">📄</span>
+                    <span className="pdf-text">Or upload a PDF file</span>
+                  </label>
+                  <input
+                    id="pdf-input"
+                    type="file"
+                    accept=".pdf"
+                    onChange={handlePDFUpload}
+                    disabled={loading || quizLoading}
+                    className="pdf-input"
+                  />
+                  <span className="pdf-hint">Max 10MB</span>
+                </div>
+
+                {/* Buttons */}
                 <div className="button-group">
                   <button
                     className="btn btn-primary"
@@ -203,8 +286,8 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Quiz Display */}
-            {quiz && (
+            {/* Quiz Preview Display */}
+            {quiz && !takingQuiz && (
               <div className="quiz-display">
                 <div className="quiz-header">
                   <h2>📋 Quiz Questions</h2>
@@ -212,38 +295,44 @@ export default function Dashboard() {
                     ✕ Close
                   </button>
                 </div>
-                <div className="quiz-content">
-                  {Array.isArray(quiz) && quiz.map((q, index) => (
-                    <div key={index} className="quiz-item">
-                      <div className="quiz-question">
-                        <span className="question-number">Q{index + 1}.</span>
-                        <span>{q.question}</span>
-                        {q.difficulty && (
-                          <span className={`difficulty difficulty-${q.difficulty.toLowerCase()}`}>
-                            {q.difficulty}
-                          </span>
-                        )}
-                      </div>
-                      <div className="quiz-options">
-                        {q.options && q.options.map((option, optIndex) => (
-                          <div
-                            key={optIndex}
-                            className={`quiz-option ${
-                              optIndex === q.correctAnswer ? 'correct-answer' : ''
-                            }`}
-                          >
-                            <span className="option-letter">
-                              {String.fromCharCode(65 + optIndex)}.
+                <div className="quiz-preview">
+                  <p className="quiz-intro">
+                    You have <strong>{quiz.length} questions</strong> to answer.
+                  </p>
+                  <div className="quiz-content">
+                    {Array.isArray(quiz) && quiz.map((q, index) => (
+                      <div key={index} className="quiz-item">
+                        <div className="quiz-question">
+                          <span className="question-number">Q{index + 1}.</span>
+                          <span>{q.question}</span>
+                          {q.difficulty && (
+                            <span className={`difficulty difficulty-${q.difficulty.toLowerCase()}`}>
+                              {q.difficulty}
                             </span>
-                            <span>{option}</span>
-                            {optIndex === q.correctAnswer && (
-                              <span className="correct-badge">✓ Correct</span>
-                            )}
-                          </div>
-                        ))}
+                          )}
+                        </div>
+                        <div className="quiz-options">
+                          {q.options && q.options.map((option, optIndex) => (
+                            <div
+                              key={optIndex}
+                              className="quiz-option"
+                            >
+                              <span className="option-letter">
+                                {String.fromCharCode(65 + optIndex)}.
+                              </span>
+                              <span>{option}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                  <button
+                    className="btn btn-primary btn-start-quiz"
+                    onClick={handleStartQuiz}
+                  >
+                    ▶ Start Quiz
+                  </button>
                 </div>
               </div>
             )}
