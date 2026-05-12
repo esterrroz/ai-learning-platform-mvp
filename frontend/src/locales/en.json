@@ -102,6 +102,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "cancel": "Cancel",
-    "ok": "OK"
+    "ok": "OK",
+    "signOut": "Sign Out"
   }
 }

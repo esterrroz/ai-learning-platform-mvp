@@ -107,7 +107,7 @@
 }
 
 [dir="rtl"] .sidebar-link:hover {
-  transform: translateX(-4px);
+  transform: translateX(4px);
 }
 
 [dir="rtl"] .sidebar-link.active {

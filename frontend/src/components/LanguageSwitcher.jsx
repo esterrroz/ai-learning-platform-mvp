@@ -3,26 +3,14 @@ import '../styles/LanguageSwitcher.css';
 
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
+  const isHebrew = i18n.language === 'he';
 
-  const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'he' : 'en';
-    i18n.changeLanguage(newLanguage);
-  };
+  const toggle = () => i18n.changeLanguage(isHebrew ? 'en' : 'he');
 
   return (
-    <div className="language-switcher">
-      <button
-        className="language-toggle-btn"
-        onClick={toggleLanguage}
-        title={i18n.language === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
-      >
-        <span className="lang-icon">
-          {i18n.language === 'en' ? '🇮🇱' : '🇺🇸'}
-        </span>
-        <span className="lang-text">
-          {i18n.language === 'en' ? 'עברית' : 'English'}
-        </span>
-      </button>
-    </div>
+    <button className="lang-toggle" onClick={toggle} title={isHebrew ? 'Switch to English' : 'עבור לעברית'}>
+      <span className="lang-flag">{isHebrew ? '🇺🇸' : '🇮🇱'}</span>
+      <span className="lang-label">{isHebrew ? 'English' : 'עברית'}</span>
+    </button>
   );
 }
