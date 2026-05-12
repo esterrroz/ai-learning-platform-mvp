@@ -1,0 +1,107 @@
+{
+  "navbar": {
+    "language": "שפה",
+    "english": "English",
+    "hebrew": "עברית"
+  },
+  "sidebar": {
+    "logo": "למידה",
+    "main": "ראשי",
+    "uploadNew": "העלאת חומר חדש",
+    "myLibrary": "הספרייה שלי",
+    "tools": "כלים",
+    "summarizer": "מיכל תקציר",
+    "lessonGenerator": "יוצר שיעורים",
+    "studyHub": "מרכז הלימוד"
+  },
+  "dashboard": {
+    "aiLearningPlatform": "פלטפורמת למידה בעזרת בינה מלאכותית",
+    "pasteTextBelowDescription": "הדבק את הטקסט שלך להלן וקבל תקציר המופעל על ידי בינה מלאכותית",
+    "inputText": "הקלד טקסט",
+    "textareaPlaceholder": "הדבק או הקלד את הטקסט שלך כאן...",
+    "orUploadPDF": "או העלה קובץ PDF",
+    "maxFileSize": "מקס 10MB",
+    "summarizeButton": "צור תקציר",
+    "clearButton": "נקה",
+    "summary": "תקציר",
+    "summaryPlaceholder": "התקציר שלך יופיע כאן...",
+    "generateQuiz": "צור חידון",
+    "saveMaterial": "שמור חומר",
+    "materialSaved": "החומר נשמר בהצלחה!",
+    "failedToSave": "הצלה לשמור חומר:",
+    "pdfUploaded": "PDF הועלה! כוללי",
+    "charactersFrom": "תווים מ",
+    "pages": "עמוד(ים).",
+    "noTextToSummarize": "אנא הכנס טקסט כדי ליצור תקציר",
+    "invalidPDF": "אנא העלה קובץ PDF חוקי",
+    "fileTooLarge": "קובץ PDF גדול מדי. הגודל המרבי הוא 10MB",
+    "generateSummaryFirst": "אנא צור תקציר תחילה",
+    "saveSummaryFirst": "אנא צור תקציר תחילה לפני שמירה"
+  },
+  "lessonGenerator": {
+    "lessonGenerator": "יוצר שיעורים",
+    "selectCategoryDescription": "בחר קטגוריה וספק נושא ליצירת שיעורים מותאמים אישית",
+    "customizeYourLesson": "התאם את השיעור שלך",
+    "category": "קטגוריה",
+    "selectCategory": "-- בחר קטגוריה --",
+    "subCategory": "תת-קטגוריה",
+    "selectSubCategory": "-- בחר תת-קטגוריה --",
+    "topicPrompt": "נושא/בקשה",
+    "topicPromptPlaceholder": "הכנס את הנושא או השאלה הספציפית שברצונך ללמוד...",
+    "characters": "תווים",
+    "generateLesson": "צור שיעור",
+    "generatingLesson": "יוצר שיעור...",
+    "yourLesson": "השיעור שלך",
+    "lessonPlaceholder": "השיעור המותאם שלך יופיע כאן...",
+    "fillAllFields": "מלא את כל השדות ולחץ על \"צור שיעור\" כדי להתחיל!",
+    "selectCategoryError": "אנא בחר קטגוריה",
+    "selectSubCategoryError": "אנא בחר תת-קטגוריה",
+    "enterPromptError": "אנא הכנס בקשה או נושא"
+  },
+  "studyHub": {
+    "studyHub": "מרכז הלימוד",
+    "reviewMaterialsDescription": "בדוק את החומר שלך וזקן את התקדמותך",
+    "studyFeaturesComingSoon": "תכונות הלימוד יהיו זמינות בקרוב...",
+    "manageYourMaterials": "תוכל לנהל את החומר והחידונים השמורים שלך כאן."
+  },
+  "uploadNew": {
+    "uploadNew": "העלאת חומר חדש",
+    "pasteOrUpload": "הדבק או העלה חומר ליצירת שיעור חדש",
+    "inputText": "הקלד טקסט",
+    "orUploadPDF": "או העלה קובץ PDF",
+    "processButton": "עבד",
+    "clearButton": "נקה",
+    "processedContent": "תוכן מעובד",
+    "contentPlaceholder": "התוכן יופיע כאן לאחר עיבוד..."
+  },
+  "myLibrary": {
+    "myLibrary": "הספרייה שלי",
+    "viewYourMaterials": "צפה בכל החומר השמור שלך וניהול אותו",
+    "noMaterials": "לא נמצא חומר",
+    "loadingMaterials": "טוען את החומר שלך...",
+    "deleteMaterial": "מחק",
+    "viewMaterial": "צפה"
+  },
+  "quizGenerator": {
+    "generateQuizzes": "צור חידונים",
+    "createTestsFromContent": "צור בדיקות מהתוכן שלך",
+    "startQuiz": "התחל חידון",
+    "question": "שאלה",
+    "answer": "תשובה",
+    "correct": "נכון!",
+    "incorrect": "לא נכון",
+    "score": "ניקוד",
+    "completed": "החידון הושלם"
+  },
+  "common": {
+    "error": "שגיאה",
+    "success": "הצלחה",
+    "loading": "טוען...",
+    "close": "סגור",
+    "save": "שמור",
+    "delete": "מחק",
+    "edit": "ערוך",
+    "cancel": "ביטול",
+    "ok": "אישור"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "navbar": {
+    "language": "Language",
+    "english": "English",
+    "hebrew": "עברית"
+  },
+  "sidebar": {
+    "logo": "Learning",
+    "main": "Main",
+    "uploadNew": "Upload New",
+    "myLibrary": "My Library",
+    "tools": "Tools",
+    "summarizer": "Summarizer",
+    "lessonGenerator": "Lesson Generator",
+    "studyHub": "Study Hub"
+  },
+  "dashboard": {
+    "aiLearningPlatform": "AI Learning Platform",
+    "pasteTextBelowDescription": "Paste your text below and get an AI-powered summary",
+    "inputText": "Input Text",
+    "textareaPlaceholder": "Paste or type your text here...",
+    "orUploadPDF": "Or upload a PDF file",
+    "maxFileSize": "Max 10MB",
+    "summarizeButton": "Summarize",
+    "clearButton": "Clear",
+    "summary": "Summary",
+    "summaryPlaceholder": "Your summary will appear here...",
+    "generateQuiz": "Generate Quiz",
+    "saveMaterial": "Save Material",
+    "materialSaved": "Material saved successfully!",
+    "failedToSave": "Failed to save material:",
+    "pdfUploaded": "PDF uploaded! Extracted",
+    "charactersFrom": "characters from",
+    "pages": "page(s).",
+    "noTextToSummarize": "Please enter some text to summarize",
+    "invalidPDF": "Please upload a valid PDF file",
+    "fileTooLarge": "PDF file is too large. Maximum size is 10MB",
+    "generateSummaryFirst": "Please generate a summary first",
+    "saveSummaryFirst": "Please generate a summary first before saving"
+  },
+  "lessonGenerator": {
+    "lessonGenerator": "Lesson Generator",
+    "selectCategoryDescription": "Select a category and provide a topic to generate personalized lessons",
+    "customizeYourLesson": "Customize Your Lesson",
+    "category": "Category",
+    "selectCategory": "-- Select a Category --",
+    "subCategory": "Sub-Category",
+    "selectSubCategory": "-- Select a Sub-Category --",
+    "topicPrompt": "Topic/Prompt",
+    "topicPromptPlaceholder": "Enter the specific topic or question you want to learn about...",
+    "characters": "characters",
+    "generateLesson": "Generate Lesson",
+    "generatingLesson": "Generating Lesson...",
+    "yourLesson": "Your Lesson",
+    "lessonPlaceholder": "Your personalized lesson will appear here...",
+    "fillAllFields": "Fill in all fields and click \"Generate Lesson\" to get started!",
+    "selectCategoryError": "Please select a category",
+    "selectSubCategoryError": "Please select a sub-category",
+    "enterPromptError": "Please enter a prompt or topic"
+  },
+  "studyHub": {
+    "studyHub": "Study Hub",
+    "reviewMaterialsDescription": "Review your materials and track your progress",
+    "studyFeaturesComingSoon": "Study features coming soon...",
+    "manageYourMaterials": "You can manage your saved materials and quizzes here."
+  },
+  "uploadNew": {
+    "uploadNew": "Upload New Material",
+    "pasteOrUpload": "Paste or upload material to create a new lesson",
+    "inputText": "Input Text",
+    "orUploadPDF": "Or upload a PDF file",
+    "processButton": "Process",
+    "clearButton": "Clear",
+    "processedContent": "Processed Content",
+    "contentPlaceholder": "Content will appear here after processing..."
+  },
+  "myLibrary": {
+    "myLibrary": "My Library",
+    "viewYourMaterials": "View and manage all your saved materials",
+    "noMaterials": "No materials found",
+    "loadingMaterials": "Loading your materials...",
+    "deleteMaterial": "Delete",
+    "viewMaterial": "View"
+  },
+  "quizGenerator": {
+    "generateQuizzes": "Generate Quizzes",
+    "createTestsFromContent": "Create tests from your content",
+    "startQuiz": "Start Quiz",
+    "question": "Question",
+    "answer": "Answer",
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "score": "Score",
+    "completed": "Quiz Completed"
+  },
+  "common": {
+    "error": "Error",
+    "success": "Success",
+    "loading": "Loading...",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "ok": "OK"
+  }
+}

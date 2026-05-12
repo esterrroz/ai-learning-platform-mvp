@@ -99,6 +99,29 @@
   border-radius: 0 4px 4px 0;
 }
 
+/* RTL Support */
+[dir="rtl"] .app-sidebar {
+  left: auto;
+  right: 0;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+}
+
+[dir="rtl"] .sidebar-link:hover {
+  transform: translateX(-4px);
+}
+
+[dir="rtl"] .sidebar-link.active {
+  box-shadow: inset -3px 0 0 white;
+  padding-left: 20px;
+  padding-right: 17px;
+}
+
+[dir="rtl"] .sidebar-link.active::before {
+  left: auto;
+  right: 0;
+  border-radius: 4px 0 0 4px;
+}
+
 .link-icon {
   font-size: 1.3rem;
   flex-shrink: 0;

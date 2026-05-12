@@ -73,6 +73,19 @@ export const generateQuiz = async (category, subCategory, prompt) => {
   }
 };
 
+export const generateLessonPrompt = async (category, subCategory, prompt) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/materials/generateLesson`, {
+      category,
+      subCategory,
+      prompt,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
 export const getCategories = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/categories`);

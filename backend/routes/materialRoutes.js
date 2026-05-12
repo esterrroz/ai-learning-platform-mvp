@@ -1,5 +1,5 @@
 const express = require('express');
-const { summarizeText, generateQuiz } = require('../services/aiService');
+const { summarizeText, generateQuiz, generateLesson } = require('../services/aiService');
 const { generateQuizFromSummary } = require('../services/ai/quizService');
 const { extractTextFromPDF } = require('../services/pdfService');
 const { pool } = require('../config/db');
@@ -120,6 +120,47 @@ router.post('/generateQuiz', async (req, res) => {
     console.error('Error in generateQuiz route:', error.message);
     res.status(500).json({
       error: error.message || 'Failed to generate quiz',
+    });
+  }
+});
+
+// POST /api/materials/generateLesson
+router.post('/generateLesson', async (req, res) => {
+  try {
+    const { category, subCategory, prompt } = req.body;
+
+    // Validation
+    if (!category || !subCategory || !prompt) {
+      return res.status(400).json({
+        error: 'Missing required fields: category, subCategory, prompt',
+      });
+    }
+
+    if (typeof prompt !== 'string' || prompt.trim().length === 0) {
+      return res.status(400).json({
+        error: 'Prompt must be a non-empty string',
+      });
+    }
+
+    if (prompt.length > 2000) {
+      return res.status(400).json({
+        error: 'Prompt is too long. Maximum 2000 characters allowed.',
+      });
+    }
+
+    // Call AI service to generate lesson
+    const lesson = await generateLesson(category, subCategory, prompt);
+
+    res.status(200).json({
+      lesson,
+      category,
+      subCategory,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Error in generateLesson route:', error.message);
+    res.status(500).json({
+      error: error.message || 'Failed to generate lesson',
     });
   }
 });
