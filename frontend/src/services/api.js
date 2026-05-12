@@ -9,6 +9,20 @@ axios.interceptors.request.use(config => {
   return config;
 });
 
+// Auto-logout on 401 (expired/invalid token)
+axios.interceptors.response.use(
+  res => res,
+  err => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userName');
+      window.location.reload();
+    }
+    return Promise.reject(err);
+  }
+);
+
 export const loginUser = async (name, phone) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, { name, phone });

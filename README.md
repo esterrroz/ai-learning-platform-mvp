@@ -344,23 +344,34 @@ quizzes
 
 ---
 
-## 📚 Documentation
+## 📚 API Documentation (Swagger)
 
-The backend exposes an interactive Swagger UI at **`/api-docs`**.
+The backend exposes a fully interactive **OpenAPI 3.0** interface via Swagger UI.
 
-### How to access
+**URL:** [`http://localhost:5000/api-docs`](http://localhost:5000/api-docs)
 
-1. Start the backend server (`npm run dev` inside `/backend`)
-2. Open your browser and navigate to:
+> The backend server must be running (`npm run dev` inside `/backend`) before accessing this URL.
 
-```
-http://localhost:5000/api-docs
-```
+From the Swagger UI you can:
+- Browse all endpoints grouped by tag: **Auth**, **Users**, **Categories**, **Materials**
+- Inspect request/response schemas
+- Execute live requests with the **"Try it out"** button
 
-You will see a fully interactive OpenAPI 3.0 interface where you can:
-- Browse all available endpoints grouped by tag (Users, Categories, Materials)
-- Inspect request parameters, request body schemas, and expected responses
-- Execute live requests directly from the browser using the **"Try it out"** button
+---
+
+## 🚀 Bonus Features (Beyond Requirements)
+
+The following production-grade features were added beyond the basic MVP spec:
+
+| Bonus | Description |
+|-------|-------------|
+| **i18n — Multi-language** | Full Hebrew & English support with automatic RTL/LTR layout switching via `react-i18next` |
+| **PDF Extraction** | Users can upload text-based PDFs (up to 10MB); text is extracted in-memory via `pdf-parse` and fed directly into the AI summarizer |
+| **Swagger / OpenAPI** | Interactive API documentation at `/api-docs`, auto-generated from JSDoc comments in route files |
+| **JWT Authentication** | Login issues a signed JWT (7-day expiry); all `/api/materials` routes require a valid `Bearer` token |
+| **Toast Notifications** | Global error toasts replace silent failures — any AI or network error surfaces a dismissing notification |
+| **Dockerized DB** | PostgreSQL runs in a Docker container; one command (`docker-compose up -d`) sets up the entire database |
+| **Idempotent DB Init** | Schema and seed data use `ON CONFLICT DO NOTHING` — safe to restart the server at any time |
 
 ---
 
@@ -419,13 +430,4 @@ To demonstrate the platform's flow:
 - **AI Model:** The system is optimized for `gpt-4o` to ensure high-quality educational content and structured JSON outputs.
 
 🚀 Beyond the Requirements (Bonuses Included)
-While the task required a basic MVP, I implemented several production-grade features:
-
-Multi-language Support (i18n): Full Hebrew & English support with RTL/LTR layout switching.
-
-PDF Extraction: Users can upload PDFs to generate summaries and lessons.
-
-Advanced UI/UX: Custom-designed navigation cards and modern Glassmorphism-style buttons.
-* Dockerized Environment: The entire database setup is automated via Docker Compose.  
-
-Quiz System: An interactive quiz generator based on the AI lesson content.
+> See the [Bonus Features](#-bonus-features-beyond-requirements) section above for a full breakdown.

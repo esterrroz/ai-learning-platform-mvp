@@ -1,5 +1,8 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const path = require('path');
+require('dotenv').config();
+
+const PORT = process.env.PORT || 5000;
 
 const options = {
   definition: {
@@ -10,7 +13,7 @@ const options = {
       description: 'AI-powered learning platform — summarize content, generate quizzes, and manage materials.',
     },
     servers: [
-      { url: 'http://localhost:5000', description: 'Local development' },
+      { url: `http://localhost:${PORT}`, description: 'Local development' },
     ],
     components: {
       schemas: {
