@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS sub_categories (
   name VARCHAR(255) NOT NULL,
   category_id INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+  UNIQUE (name, category_id)
 );
 
 -- Create Prompts table
