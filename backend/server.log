@@ -1,0 +1,13 @@
+◇ injected env (8) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+📡 Database Configuration:
+   Host: localhost
+   Port: 5432
+   Database: learning_db
+   User: user
+🚀 Starting server...
+⏳ Waiting for database to be ready...
+✅ Successfully connected to PostgreSQL
+✅ Database is ready
+📝 Initializing database schema...
+✅ Database tables initialized successfully
+✅ Server is running on port 5000

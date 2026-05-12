@@ -2,6 +2,24 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
+export const registerUser = async (name, phone) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/users`, { name, phone });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
+export const getUsers = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/users`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.error || error.message;
+  }
+};
+
 export const uploadPDF = async (file) => {
   try {
     const formData = new FormData();
