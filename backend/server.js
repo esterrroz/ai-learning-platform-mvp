@@ -6,7 +6,6 @@ const REQUIRED_ENV = [
   { key: 'JWT_SECRET',     hint: 'Set a long random string (e.g. openssl rand -hex 32)' },
 ];
 
-// At least one DB config must be present
 const hasDbUrl  = !!process.env.DATABASE_URL;
 const hasDbVars = process.env.DB_HOST && process.env.DB_USER && process.env.DB_NAME;
 if (!hasDbUrl && !hasDbVars) {
@@ -40,15 +39,22 @@ const { authMiddleware } = require('./middleware/auth');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// 1. הגדרת CORS מפורטת - מבטיח חיבור תקין מהענן
+app.use(cors({
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// 2. הגדרת JSON Middleware
+app.use(express.json());
+
 // Configure multer for file uploads
-const storage = multer.memoryStorage(); // Store files in memory
+const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
-  },
+  limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    // Only accept PDF files
     if (file.mimetype === 'application/pdf') {
       cb(null, true);
     } else {
@@ -57,11 +63,7 @@ const upload = multer({
   },
 });
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Make upload middleware available to routes
+// הפיכת ה-upload לזמין ב-Routes
 app.use((req, res, next) => {
   req.uploadPDF = upload.single('pdf');
   next();
@@ -74,7 +76,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/auth',       authRoutes);
 app.use('/api/materials',  authMiddleware, materialRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/users',      userRoutes);
+app.use('/api/users',       userRoutes);
 
 // Health check route
 app.get('/health', async (req, res) => {
@@ -108,7 +110,6 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);
-    console.error('Error details:', error);
     process.exit(1);
   }
 };
