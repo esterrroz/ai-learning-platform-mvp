@@ -11,3 +11,58 @@
 📝 Initializing database schema...
 ✅ Database tables initialized successfully
 ✅ Server is running on port 5000
+✅ Successfully connected to PostgreSQL
+[materialController] 📥 File received: "×¤×¨×××§× ××¢×¨××.pdf" (639181 bytes)
+[pdfService] 📄 Parsing PDF buffer — size: 639181 bytes
+[pdfService] 📊 Pages: 2 | Raw text length: 4
+[pdfService] 🔤 Meaningful characters found: 0
+[pdfService] ❌ Not enough text extracted (0 meaningful chars). PDF is likely image-based, scanned, or encrypted.
+[materialController] ❌ User error: This PDF seems to be an image. Please upload a text-based PDF or copy-paste the text.
+✅ Successfully connected to PostgreSQL
+Error calling OpenAI API for lesson generation: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+[materialController] generateLessonFromPrompt error: AI Service Error: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+[materialController] 📥 File received: "×¤×¨×××§× ××¢×¨××.pdf" (639181 bytes)
+[pdfService] 📄 Parsing PDF buffer — size: 639181 bytes
+[pdfService] 📊 Pages: 2 | Raw text length: 4
+[pdfService] 🔤 Meaningful characters found: 0
+[pdfService] ❌ Not enough text extracted (0 meaningful chars). PDF is likely image-based, scanned, or encrypted.
+[materialController] ❌ User error: This PDF seems to be an image. Please upload a text-based PDF or copy-paste the text.
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+Error calling OpenAI API: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+[materialController] summarize error: AI Service Error: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+✅ Successfully connected to PostgreSQL
+[materialController] 📥 File received: "×¤×¨×××§× ××¢×¨××.pdf" (639181 bytes)
+[pdfService] 📄 Parsing PDF buffer — size: 639181 bytes
+[pdfService] 📊 Pages: 2 | Raw text length: 4
+[pdfService] 🔤 Meaningful characters found: 0
+[pdfService] ❌ Not enough text extracted (0 meaningful chars). PDF is likely image-based, scanned, or encrypted.
+[materialController] ❌ User error: This PDF seems to be an image. Please upload a text-based PDF or copy-paste the text.
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+✅ Successfully connected to PostgreSQL
+Error calling OpenAI API: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+[materialController] summarize error: AI Service Error: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+✅ Successfully connected to PostgreSQL
+Error calling OpenAI API: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+[materialController] summarize error: AI Service Error: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+✅ Successfully connected to PostgreSQL
+Error calling OpenAI API: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
+[materialController] summarize error: AI Service Error: 401 Incorrect API key provided: sk-proj-********************************************************************************************************************************************************GbQA. You can find your API key at https://platform.openai.com/account/api-keys.
