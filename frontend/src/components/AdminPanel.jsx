@@ -3,14 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { getUsers, getPrompts } from '../services/api';
 import '../styles/AdminPanel.css';
 
+// פאנל ניהול — טבלאות משתמשים ופרומפטים
 export default function AdminPanel() {
   const { t } = useTranslation();
-  const [users, setUsers]     = useState([]);
-  const [prompts, setPrompts] = useState([]);
+  const [users, setUsers]           = useState([]);
+  const [prompts, setPrompts]       = useState([]);
   const [usersError, setUsersError]     = useState('');
   const [promptsError, setPromptsError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]       = useState(true);
 
+  // טעינת נתונים במקביל
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);
@@ -27,8 +29,7 @@ export default function AdminPanel() {
     fetchAll();
   }, [t]);
 
-  const formatDate = (iso) =>
-    iso ? new Date(iso).toLocaleString() : '—';
+  const formatDate = (iso) => iso ? new Date(iso).toLocaleString() : '—';
 
   if (loading) {
     return (
@@ -56,7 +57,7 @@ export default function AdminPanel() {
         </div>
       </div>
 
-      {/* Users Table */}
+      {/* טבלת משתמשים */}
       <section className="admin-section">
         <h2>👥 {t('admin.usersTable')}</h2>
         {usersError ? (
@@ -82,9 +83,7 @@ export default function AdminPanel() {
                   </tr>
                 ))}
                 {users.length === 0 && (
-                  <tr>
-                    <td colSpan={4} className="empty-row">—</td>
-                  </tr>
+                  <tr><td colSpan={4} className="empty-row">—</td></tr>
                 )}
               </tbody>
             </table>
@@ -92,7 +91,7 @@ export default function AdminPanel() {
         )}
       </section>
 
-      {/* Prompts Table */}
+      {/* טבלת פרומפטים */}
       <section className="admin-section">
         <h2>📋 {t('admin.promptsTable')}</h2>
         {promptsError ? (
@@ -126,9 +125,7 @@ export default function AdminPanel() {
                   </tr>
                 ))}
                 {prompts.length === 0 && (
-                  <tr>
-                    <td colSpan={7} className="empty-row">—</td>
-                  </tr>
+                  <tr><td colSpan={7} className="empty-row">—</td></tr>
                 )}
               </tbody>
             </table>

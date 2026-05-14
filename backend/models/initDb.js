@@ -1,8 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const { pool } = require('../config/db');
 
-// DDL statements executed in dependency order
+// הגדרות DDL — יצירת טבלאות לפי סדר תלויות
 const DDL = [
   `CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -59,56 +57,53 @@ const DDL = [
   )`,
 ];
 
-const CATEGORY_SEEDS = [
-  'English',
-  'Mathematics',
-  'History',
-  'Biology',
-  'Grammar',
-];
+// קטגוריות ראשיות לזריעה
+const CATEGORY_SEEDS = ['English', 'Mathematics', 'History', 'Biology', 'Grammar'];
 
+// תת-קטגוריות לזריעה — מקושרות לקטגוריות לפי שם
 const SUB_CATEGORY_SEEDS = [
-  { name: 'Grammar',        category: 'English'     },
-  { name: 'Vocabulary',     category: 'English'     },
-  { name: 'Literature',     category: 'English'     },
-  { name: 'Algebra',        category: 'Mathematics' },
-  { name: 'Geometry',       category: 'Mathematics' },
-  { name: 'Calculus',       category: 'Mathematics' },
-  { name: 'Ancient History',category: 'History'     },
-  { name: 'Modern History', category: 'History'     },
-  { name: 'World Wars',     category: 'History'     },
-  { name: 'Human Anatomy',  category: 'Biology'     },
-  { name: 'Genetics',       category: 'Biology'     },
-  { name: 'Ecosystems',     category: 'Biology'     },
-  { name: 'Syntax',         category: 'Grammar'     },
-  { name: 'Punctuation',    category: 'Grammar'     },
-  { name: 'Parts of Speech',category: 'Grammar'     },
+  { name: 'Grammar',         category: 'English'     },
+  { name: 'Vocabulary',      category: 'English'     },
+  { name: 'Literature',      category: 'English'     },
+  { name: 'Algebra',         category: 'Mathematics' },
+  { name: 'Geometry',        category: 'Mathematics' },
+  { name: 'Calculus',        category: 'Mathematics' },
+  { name: 'Ancient History', category: 'History'     },
+  { name: 'Modern History',  category: 'History'     },
+  { name: 'World Wars',      category: 'History'     },
+  { name: 'Human Anatomy',   category: 'Biology'     },
+  { name: 'Genetics',        category: 'Biology'     },
+  { name: 'Ecosystems',      category: 'Biology'     },
+  { name: 'Syntax',          category: 'Grammar'     },
+  { name: 'Punctuation',     category: 'Grammar'     },
+  { name: 'Parts of Speech', category: 'Grammar'     },
 ];
 
+// אתחול בסיס הנתונים — בטוח להרצה חוזרת (idempotent)
 const initDb = async () => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
-    // Create all tables
+    // יצירת כל הטבלאות
     for (const stmt of DDL) {
       await client.query(stmt);
     }
 
-    // Migrations: add columns that may not exist in older installs
+    // מיגרציה: הוספת עמודת user_id ל-materials אם לא קיימת (גרסאות ישנות)
     await client.query(
       `ALTER TABLE materials ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`
     );
 
-    // Remove legacy categories that are no longer part of the academic curriculum.
-    // ON DELETE CASCADE on sub_categories and prompts handles child rows automatically.
+    // מחיקת קטגוריות ישנות שאינן חלק מהתכנית האקדמית
+    // ON DELETE CASCADE מטפל אוטומטית בתת-קטגוריות ופרומפטים קשורים
     const legacyCategories = ['Programming', 'Languages', 'Cooking'];
     for (const name of legacyCategories) {
       await client.query('DELETE FROM categories WHERE name = $1', [name]);
     }
-    console.log('🗑️  Legacy categories removed (if they existed)');
+    console.log('🗑️  קטגוריות ישנות הוסרו (אם היו קיימות)');
 
-    // Seed categories (idempotent via UNIQUE name constraint)
+    // זריעת קטגוריות — ON CONFLICT מונע כפילויות
     for (const name of CATEGORY_SEEDS) {
       await client.query(
         'INSERT INTO categories (name) VALUES ($1) ON CONFLICT (name) DO NOTHING',
@@ -116,7 +111,7 @@ const initDb = async () => {
       );
     }
 
-    // Seed sub-categories (idempotent via UNIQUE(name, category_id) constraint)
+    // זריעת תת-קטגוריות — ON CONFLICT מונע כפילויות
     for (const { name, category } of SUB_CATEGORY_SEEDS) {
       await client.query(
         `INSERT INTO sub_categories (name, category_id)
@@ -127,10 +122,10 @@ const initDb = async () => {
     }
 
     await client.query('COMMIT');
-    console.log('✅ Database tables initialized successfully');
+    console.log('✅ טבלאות בסיס הנתונים אותחלו בהצלחה');
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error('❌ Error initializing database:', error.message);
+    console.error('❌ שגיאה באתחול בסיס הנתונים:', error.message);
     throw error;
   } finally {
     client.release();

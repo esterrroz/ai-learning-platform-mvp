@@ -4,13 +4,15 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import '../styles/Sidebar.css';
 
+// סרגל ניווט צדדי — תומך במובייל (המבורגר) ובדסקטופ
 export default function Sidebar({ userName }) {
   const location = useLocation();
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const { t }    = useTranslation();
+  const [open, setOpen] = useState(false); // מצב פתיחה במובייל
 
   const isActive = (path) => location.pathname === path;
 
+  // יציאה — מנקה localStorage וטוען מחדש
   const handleLogout = () => {
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
@@ -22,14 +24,14 @@ export default function Sidebar({ userName }) {
 
   return (
     <>
-      {/* Mobile top bar */}
+      {/* סרגל עליון למובייל */}
       <div className="mobile-topbar">
         <button className="hamburger-btn" onClick={() => setOpen(true)} aria-label="Open menu">☰</button>
         <span className="logo-icon">📚</span>
         <span className="logo-text">{t('sidebar.logo')}</span>
       </div>
 
-      {/* Backdrop */}
+      {/* רקע כהה בעת פתיחת תפריט מובייל */}
       <div className={`sidebar-backdrop ${open ? 'visible' : ''}`} onClick={close} />
 
       <aside className={`app-sidebar ${open ? 'open' : ''}`}>
@@ -42,6 +44,7 @@ export default function Sidebar({ userName }) {
         </div>
 
         <nav className="sidebar-nav">
+          {/* קישורים ראשיים */}
           <div className="nav-section">
             <h3 className="section-title">{t('sidebar.main')}</h3>
             <Link to="/upload"  className={`sidebar-link ${isActive('/upload')  ? 'active' : ''}`} onClick={close}>
@@ -54,6 +57,7 @@ export default function Sidebar({ userName }) {
             </Link>
           </div>
 
+          {/* כלים */}
           <div className="nav-section">
             <h3 className="section-title">{t('sidebar.tools')}</h3>
             <Link to="/dashboard" className={`sidebar-link ${isActive('/dashboard') ? 'active' : ''}`} onClick={close}>
@@ -75,6 +79,7 @@ export default function Sidebar({ userName }) {
           </div>
         </nav>
 
+        {/* תחתית הסרגל — שפה, שם משתמש, תיעוד API, יציאה */}
         <div className="sidebar-footer">
           <LanguageSwitcher />
           <div className="sidebar-user">
@@ -87,7 +92,7 @@ export default function Sidebar({ userName }) {
             rel="noopener noreferrer"
             className="api-docs-btn"
           >
-            <span>📄</span> API Documentation
+            <span>📄</span> {t('sidebar.apiDocs')}
           </a>
           <button className="logout-btn" onClick={handleLogout}>
             {t('common.signOut', 'Sign Out')}

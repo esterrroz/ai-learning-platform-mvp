@@ -4,11 +4,12 @@ import { loginUser } from '../services/api';
 import LanguageSwitcher from './LanguageSwitcher';
 import '../styles/Register.css';
 
+// מסך הרשמה/התחברות — שם + טלפון, מחזיר JWT ומעדכן state ב-App
 export default function Register({ onRegistered }) {
   const { t } = useTranslation();
-  const [name, setName]   = useState('');
-  const [phone, setPhone] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName]     = useState('');
+  const [phone, setPhone]   = useState('');
+  const [error, setError]   = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -22,6 +23,7 @@ export default function Register({ onRegistered }) {
     setError('');
 
     try {
+      // loginUser מבצע upsert — מוצא משתמש קיים או יוצר חדש
       const user = await loginUser(name.trim(), phone.trim() || null);
       localStorage.setItem('userId',   String(user.id));
       localStorage.setItem('userName', user.name);

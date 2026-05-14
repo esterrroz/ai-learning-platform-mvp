@@ -14,12 +14,14 @@ import AdminPanel from './components/AdminPanel';
 import './App.css';
 
 function App() {
+  // בדיקה אם המשתמש כבר מחובר (שמור ב-localStorage)
   const [user, setUser] = useState(() => {
     const id   = localStorage.getItem('userId');
     const name = localStorage.getItem('userName');
     return id ? { id, name } : null;
   });
 
+  // אם אין משתמש מחובר — הצג מסך הרשמה/התחברות
   if (!user) {
     return (
       <I18nextProvider i18n={i18n}>
@@ -30,6 +32,7 @@ function App() {
     );
   }
 
+  // אפליקציה ראשית עם ניווט צדדי ונתיבים
   return (
     <I18nextProvider i18n={i18n}>
       <ToastProvider>

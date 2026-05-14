@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import '../styles/QuizTaking.css';
 
+// ממשק לקיחת חידון — שאלות, ניווט, ציון סופי
 export default function QuizTaking({ quiz, materialTitle, onBack }) {
   const { t } = useTranslation();
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState(Array(quiz.length).fill(null));
+  const [answers, setAnswers]   = useState(Array(quiz.length).fill(null));
   const [showScore, setShowScore] = useState(false);
 
+  // בחירת תשובה — מעבר אוטומטי לשאלה הבאה אחרי 300ms
   const handleAnswerClick = (answerIndex) => {
     if (showScore) return;
     const newAnswers = [...answers];
@@ -18,33 +20,28 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
     }
   };
 
-  const handleNext = () => {
-    if (currentQuestion < quiz.length - 1) setCurrentQuestion(currentQuestion + 1);
-  };
-
-  const handlePrev = () => {
-    if (currentQuestion > 0) setCurrentQuestion(currentQuestion - 1);
-  };
-
+  const handleNext   = () => { if (currentQuestion < quiz.length - 1) setCurrentQuestion(currentQuestion + 1); };
+  const handlePrev   = () => { if (currentQuestion > 0) setCurrentQuestion(currentQuestion - 1); };
   const handleFinish = () => setShowScore(true);
 
-  const calculateScore = () =>
-    quiz.reduce((acc, q, i) => acc + (answers[i] === q.correctAnswer ? 1 : 0), 0);
+  // חישוב ציון
+  const calculateScore      = () => quiz.reduce((acc, q, i) => acc + (answers[i] === q.correctAnswer ? 1 : 0), 0);
+  const getScorePercentage  = () => Math.round((calculateScore() / quiz.length) * 100);
 
-  const getScorePercentage = () => Math.round((calculateScore() / quiz.length) * 100);
-
+  // פידבק לפי אחוז
   const getScoreFeedback = (pct) => {
     if (pct === 100) return '🏆 Perfect Score!';
-    if (pct >= 80)  return '⭐ Excellent!';
-    if (pct >= 60)  return '👍 Good Job!';
-    if (pct >= 40)  return '💪 Keep Practicing!';
+    if (pct >= 80)   return '⭐ Excellent!';
+    if (pct >= 60)   return '👍 Good Job!';
+    if (pct >= 40)   return '💪 Keep Practicing!';
     return '📚 Study More!';
   };
 
-  const currentQ = quiz[currentQuestion];
+  const currentQ  = quiz[currentQuestion];
   const isAnswered = answers[currentQuestion] !== null;
   const isCorrect  = isAnswered && answers[currentQuestion] === currentQ.correctAnswer;
 
+  // מסך ציון סופי
   if (showScore) {
     const score      = calculateScore();
     const percentage = getScorePercentage();
@@ -52,9 +49,7 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
     return (
       <div className="quiz-taking">
         <div className="quiz-header">
-          <button className="btn btn-back" onClick={onBack}>
-            {t('quizTaking.backToQuiz')}
-          </button>
+          <button className="btn btn-back" onClick={onBack}>{t('quizTaking.backToQuiz')}</button>
         </div>
 
         <div className="score-container">
@@ -83,6 +78,7 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
               </div>
             </div>
 
+            {/* פירוט תשובות */}
             <div className="results-table">
               <h2>{t('quizTaking.resultsSummary')}</h2>
               <div className="table-container">
@@ -113,15 +109,14 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
               </div>
             </div>
 
-            <button className="btn btn-back-home" onClick={onBack}>
-              {t('quizTaking.backToSelection')}
-            </button>
+            <button className="btn btn-back-home" onClick={onBack}>{t('quizTaking.backToSelection')}</button>
           </div>
         </div>
       </div>
     );
   }
 
+  // מסך שאלה פעילה
   return (
     <div className="quiz-taking">
       <div className="quiz-header">
@@ -129,17 +124,13 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
           <h1>📚 {materialTitle}</h1>
           <p>{t('quizTaking.question')} {currentQuestion + 1} {t('quizTaking.of')} {quiz.length}</p>
         </div>
-        <button className="btn btn-back" onClick={onBack}>
-          {t('quizTaking.exitQuiz')}
-        </button>
+        <button className="btn btn-back" onClick={onBack}>{t('quizTaking.exitQuiz')}</button>
       </div>
 
+      {/* סרגל התקדמות */}
       <div className="progress-section">
         <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${((currentQuestion + 1) / quiz.length) * 100}%` }}
-          />
+          <div className="progress-fill" style={{ width: `${((currentQuestion + 1) / quiz.length) * 100}%` }} />
         </div>
         <span className="progress-text">{currentQuestion + 1} / {quiz.length}</span>
       </div>
@@ -149,12 +140,11 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
           <div className="question-header">
             <h2>Q{currentQuestion + 1}. {currentQ.question}</h2>
             {currentQ.difficulty && (
-              <span className={`difficulty difficulty-${currentQ.difficulty.toLowerCase()}`}>
-                {currentQ.difficulty}
-              </span>
+              <span className={`difficulty difficulty-${currentQ.difficulty.toLowerCase()}`}>{currentQ.difficulty}</span>
             )}
           </div>
 
+          {/* אפשרויות תשובה */}
           <div className="options-container">
             {currentQ.options.map((option, index) => (
               <button
@@ -162,9 +152,7 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
                 className={`option-button ${answers[currentQuestion] === index ? 'selected' : ''} ${
                   showScore && index === currentQ.correctAnswer ? 'correct' : ''
                 } ${
-                  showScore && answers[currentQuestion] === index && index !== currentQ.correctAnswer
-                    ? 'incorrect'
-                    : ''
+                  showScore && answers[currentQuestion] === index && index !== currentQ.correctAnswer ? 'incorrect' : ''
                 }`}
                 onClick={() => handleAnswerClick(index)}
                 disabled={showScore}
@@ -172,28 +160,25 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
                 <span className="option-letter">{String.fromCharCode(65 + index)}</span>
                 <span className="option-text">{option}</span>
                 {answers[currentQuestion] === index && (
-                  <span className="option-indicator">
-                    {index === currentQ.correctAnswer ? '✓' : '○'}
-                  </span>
+                  <span className="option-indicator">{index === currentQ.correctAnswer ? '✓' : '○'}</span>
                 )}
               </button>
             ))}
           </div>
 
+          {/* פידבק מיידי לאחר בחירה */}
           {isAnswered && (
             <div className={`question-status ${isCorrect ? 'correct' : 'incorrect'}`}>
               <p>{isCorrect ? t('quizTaking.correctFeedback') : t('quizTaking.incorrectFeedback')}</p>
             </div>
           )}
-
           {!isAnswered && (
-            <div className="question-status unanswered">
-              <p>{t('quizTaking.selectAnswer')}</p>
-            </div>
+            <div className="question-status unanswered"><p>{t('quizTaking.selectAnswer')}</p></div>
           )}
         </div>
       </div>
 
+      {/* ניווט בין שאלות */}
       <div className="navigation-section">
         <button className="btn btn-nav" onClick={handlePrev} disabled={currentQuestion === 0}>
           {t('quizTaking.previous')}
@@ -203,9 +188,7 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
           {quiz.map((_, index) => (
             <button
               key={index}
-              className={`indicator ${index === currentQuestion ? 'active' : ''} ${
-                answers[index] !== null ? 'answered' : ''
-              }`}
+              className={`indicator ${index === currentQuestion ? 'active' : ''} ${answers[index] !== null ? 'answered' : ''}`}
               onClick={() => setCurrentQuestion(index)}
               title={`${t('quizTaking.question')} ${index + 1}`}
             >
@@ -215,38 +198,28 @@ export default function QuizTaking({ quiz, materialTitle, onBack }) {
         </div>
 
         {currentQuestion === quiz.length - 1 ? (
-          <button
-            className="btn btn-finish"
-            onClick={handleFinish}
-            disabled={answers.some((a) => a === null)}
-          >
+          // כפתור סיום — פעיל רק כשכל השאלות נענו
+          <button className="btn btn-finish" onClick={handleFinish} disabled={answers.some((a) => a === null)}>
             {t('quizTaking.finish')}
           </button>
         ) : (
-          <button
-            className="btn btn-nav"
-            onClick={handleNext}
-            disabled={currentQuestion === quiz.length - 1}
-          >
+          <button className="btn btn-nav" onClick={handleNext} disabled={currentQuestion === quiz.length - 1}>
             {t('quizTaking.next')}
           </button>
         )}
       </div>
 
+      {/* סיכום התקדמות */}
       <div className="answer-summary">
         <h3>{t('quizTaking.progress')}</h3>
         <div className="summary-stats">
           <div className="stat">
             <span className="stat-icon">✓</span>
-            <span className="stat-text">
-              {answers.filter((a) => a !== null).length} {t('quizTaking.answered')}
-            </span>
+            <span className="stat-text">{answers.filter((a) => a !== null).length} {t('quizTaking.answered')}</span>
           </div>
           <div className="stat">
             <span className="stat-icon">○</span>
-            <span className="stat-text">
-              {answers.filter((a) => a === null).length} {t('quizTaking.remaining')}
-            </span>
+            <span className="stat-text">{answers.filter((a) => a === null).length} {t('quizTaking.remaining')}</span>
           </div>
         </div>
       </div>

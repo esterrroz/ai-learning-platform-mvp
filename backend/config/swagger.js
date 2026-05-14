@@ -4,19 +4,21 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 5000;
 
+// הגדרות Swagger — מייצר תיעוד OpenAPI 3.0 אוטומטי מה-JSDoc בקבצי הנתיבים
 const options = {
   definition: {
     openapi: '3.0.0',
     info: {
       title: 'Learning Platform API',
       version: '1.0.0',
-      description: 'AI-powered learning platform — summarize content, generate quizzes, and manage materials.',
+      description: 'פלטפורמת למידה מבוססת AI — סיכום תוכן, יצירת חידונים וניהול חומרי לימוד.',
     },
     servers: [
-      { url: `http://localhost:${PORT}`, description: 'Local development' },
+      { url: `http://localhost:${PORT}`, description: 'פיתוח מקומי' },
     ],
     components: {
       schemas: {
+        // סכמת משתמש
         User: {
           type: 'object',
           properties: {
@@ -26,6 +28,7 @@ const options = {
             created_at: { type: 'string', format: 'date-time' },
           },
         },
+        // סכמת קטגוריה
         Category: {
           type: 'object',
           properties: {
@@ -33,6 +36,7 @@ const options = {
             name: { type: 'string' },
           },
         },
+        // סכמת תת-קטגוריה
         SubCategory: {
           type: 'object',
           properties: {
@@ -41,6 +45,7 @@ const options = {
             category_id: { type: 'integer' },
           },
         },
+        // סכמת חומר לימוד
         Material: {
           type: 'object',
           properties: {
@@ -52,6 +57,7 @@ const options = {
             created_at:    { type: 'string', format: 'date-time' },
           },
         },
+        // סכמת פרומפט (היסטוריית למידה)
         Prompt: {
           type: 'object',
           properties: {
@@ -64,6 +70,7 @@ const options = {
             created_at:      { type: 'string', format: 'date-time' },
           },
         },
+        // סכמת שגיאה כללית
         Error: {
           type: 'object',
           properties: {
@@ -73,6 +80,7 @@ const options = {
       },
     },
   },
+  // סריקת כל קבצי הנתיבים לאיסוף הערות JSDoc
   apis: [path.join(__dirname, '../routes/*.js')],
 };
 

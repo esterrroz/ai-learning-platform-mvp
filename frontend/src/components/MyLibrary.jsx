@@ -1,39 +1,36 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getMaterials, deleteMaterial } from '../services/api';
 import QuizTaking from './QuizTaking';
 import '../styles/MyLibrary.css';
 
+// ספריית חומרי לימוד — צפייה, חיפוש, מחיקה ולקיחת חידון
 export default function MyLibrary() {
-  const [materials, setMaterials] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { t } = useTranslation();
+  const [materials, setMaterials]               = useState([]);
+  const [loading, setLoading]                   = useState(true);
+  const [error, setError]                       = useState('');
   const [selectedMaterial, setSelectedMaterial] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [takingQuiz, setTakingQuiz] = useState(false);
+  const [searchTerm, setSearchTerm]             = useState('');
+  const [takingQuiz, setTakingQuiz]             = useState(false);
 
-  useEffect(() => {
-    fetchMaterials();
-  }, []);
+  useEffect(() => { fetchMaterials(); }, []);
 
   const fetchMaterials = async () => {
     try {
-      setLoading(true);
-      setError('');
+      setLoading(true); setError('');
       const data = await getMaterials();
       setMaterials(data.materials || []);
     } catch (err) {
       setError(err.toString());
-      console.error('Error fetching materials:', err);
     } finally {
       setLoading(false);
     }
   };
 
+  // מחיקת חומר עם אישור
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this material?')) {
-      return;
-    }
-
+    if (!window.confirm(t('myLibrary.deleteConfirm'))) return;
     try {
       await deleteMaterial(id);
       setMaterials(materials.filter((m) => m.id !== id));
@@ -43,138 +40,100 @@ export default function MyLibrary() {
     }
   };
 
-  const handleStartQuiz = () => {
-    if (selectedMaterial && selectedMaterial.quiz) {
-      setTakingQuiz(true);
-    }
-  };
-
-  const handleExitQuiz = () => {
-    setTakingQuiz(false);
-  };
-
   const filteredMaterials = materials.filter(
-    (material) =>
-      material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      material.original_text.toLowerCase().includes(searchTerm.toLowerCase())
+    (m) =>
+      m.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.original_text.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit',
     });
-  };
 
-  // If in quiz taking mode, show the interactive quiz
-  if (takingQuiz && selectedMaterial && selectedMaterial.quiz) {
+  // מצב לקיחת חידון
+  if (takingQuiz && selectedMaterial?.quiz) {
     return (
       <QuizTaking
         quiz={selectedMaterial.quiz}
         materialTitle={selectedMaterial.title}
-        onBack={handleExitQuiz}
+        onBack={() => setTakingQuiz(false)}
       />
     );
   }
 
   return (
     <div className="my-library">
-      {/* Header */}
       <div className="library-header">
         <div className="header-content">
-          <h1>📚 My Library</h1>
-          <p>Your saved materials, summaries, and quizzes</p>
+          <h1>📚 {t('myLibrary.myLibrary')}</h1>
+          <p>{t('myLibrary.viewYourMaterials')}</p>
         </div>
         <button className="btn btn-refresh" onClick={fetchMaterials} disabled={loading}>
-          {loading ? '⟳ Refreshing...' : '⟳ Refresh'}
+          {loading ? t('myLibrary.refreshing') : t('myLibrary.refresh')}
         </button>
       </div>
 
-      {/* Search Bar */}
+      {/* חיפוש */}
       <div className="search-section">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="🔍 Search materials by title or content..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <input type="text" className="search-input"
+          placeholder={t('myLibrary.searchPlaceholder')}
+          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         <span className="results-count">
-          {filteredMaterials.length} result{filteredMaterials.length !== 1 ? 's' : ''}
+          {filteredMaterials.length} {filteredMaterials.length === 1 ? t('myLibrary.result') : t('myLibrary.results')}
         </span>
       </div>
 
-      {/* Error Message */}
       {error && (
         <div className="error-box">
           <p>❌ Error: {error}</p>
-          <button className="btn btn-small" onClick={fetchMaterials}>
-            Try Again
-          </button>
+          <button className="btn btn-small" onClick={fetchMaterials}>{t('myLibrary.tryAgain')}</button>
         </div>
       )}
 
-      {/* Loading State */}
       {loading && (
         <div className="loading-container">
           <div className="spinner"></div>
-          <p>Loading your materials...</p>
+          <p>{t('myLibrary.loadingMaterials')}</p>
         </div>
       )}
 
-      {/* Empty State */}
       {!loading && filteredMaterials.length === 0 && !error && (
         <div className="empty-state">
           <div className="empty-icon">📭</div>
-          <h2>No materials yet</h2>
-          <p>
-            {searchTerm
-              ? 'No materials match your search. Try a different search term.'
-              : 'Start by summarizing some text in the Dashboard to create your first material!'}
-          </p>
+          <h2>{t('myLibrary.noMaterialsYet')}</h2>
+          <p>{searchTerm ? t('myLibrary.noSearchResults') : t('myLibrary.startBySummarizing')}</p>
         </div>
       )}
 
-      {/* Materials Grid */}
       {!loading && filteredMaterials.length > 0 && (
         <div className="materials-container">
-          {/* Materials List */}
+          {/* רשת כרטיסי חומרים */}
           <div className="materials-grid">
             {filteredMaterials.map((material) => (
               <div
                 key={material.id}
-                className={`material-card ${
-                  selectedMaterial?.id === material.id ? 'active' : ''
-                }`}
+                className={`material-card ${selectedMaterial?.id === material.id ? 'active' : ''}`}
                 onClick={() => setSelectedMaterial(material)}
               >
                 <div className="card-header">
                   <h3 className="card-title">{material.title}</h3>
                   <span className="card-date">{formatDate(material.created_at)}</span>
                 </div>
-
                 <div className="card-body">
                   <p className="card-preview">
                     {material.original_text.substring(0, 100)}
                     {material.original_text.length > 100 ? '...' : ''}
                   </p>
                 </div>
-
                 <div className="card-footer">
                   <div className="card-tags">
                     {material.summary && <span className="tag tag-summary">📝 Summary</span>}
-                    {material.quiz && <span className="tag tag-quiz">🎯 Quiz</span>}
+                    {material.quiz    && <span className="tag tag-quiz">🎯 Quiz</span>}
                   </div>
-                  <button
-                    className="btn btn-delete"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(material.id);
-                    }}
-                  >
+                  <button className="btn btn-delete"
+                    onClick={(e) => { e.stopPropagation(); handleDelete(material.id); }}>
                     🗑️ Delete
                   </button>
                 </div>
@@ -182,93 +141,66 @@ export default function MyLibrary() {
             ))}
           </div>
 
-          {/* Detail Panel */}
+          {/* פאנל פרטים */}
           {selectedMaterial && (
             <div className="detail-panel">
               <div className="detail-header">
                 <h2>{selectedMaterial.title}</h2>
-                <button
-                  className="btn btn-close"
-                  onClick={() => setSelectedMaterial(null)}
-                >
-                  ✕
-                </button>
+                <button className="btn btn-close" onClick={() => setSelectedMaterial(null)}>✕</button>
               </div>
 
               <div className="detail-content">
-                {/* Original Text */}
+                {/* טקסט מקורי */}
                 <div className="detail-section">
                   <h3>📄 Original Text</h3>
-                  <div className="text-box">
-                    <p>{selectedMaterial.original_text}</p>
-                  </div>
+                  <div className="text-box"><p>{selectedMaterial.original_text}</p></div>
                 </div>
 
-                {/* Summary */}
+                {/* סיכום */}
                 {selectedMaterial.summary && (
                   <div className="detail-section">
                     <h3>✨ Summary</h3>
-                    <div className="text-box">
-                      <p>{selectedMaterial.summary}</p>
-                    </div>
+                    <div className="text-box"><p>{selectedMaterial.summary}</p></div>
                   </div>
                 )}
 
-                {/* Quiz */}
+                {/* חידון */}
                 {selectedMaterial.quiz && (
                   <div className="detail-section">
                     <div className="quiz-header-with-button">
                       <h3>🎯 Quiz</h3>
-                      <button
-                        className="btn btn-primary btn-study-quiz"
-                        onClick={handleStartQuiz}
-                      >
+                      <button className="btn btn-primary btn-study-quiz"
+                        onClick={() => setTakingQuiz(true)}>
                         ▶ Study This Quiz
                       </button>
                     </div>
                     <div className="quiz-display">
-                      {Array.isArray(selectedMaterial.quiz) &&
-                        selectedMaterial.quiz.map((q, index) => (
-                          <div key={index} className="quiz-item">
-                            <div className="quiz-question">
-                              <span className="question-number">Q{index + 1}.</span>
-                              <span>{q.question}</span>
-                              {q.difficulty && (
-                                <span
-                                  className={`difficulty difficulty-${q.difficulty.toLowerCase()}`}
-                                >
-                                  {q.difficulty}
-                                </span>
-                              )}
-                            </div>
-                            <div className="quiz-options">
-                              {q.options &&
-                                q.options.map((option, optIndex) => (
-                                  <div
-                                    key={optIndex}
-                                    className={`quiz-option ${
-                                      optIndex === q.correctAnswer
-                                        ? 'correct-answer'
-                                        : ''
-                                    }`}
-                                  >
-                                    <span className="option-letter">
-                                      {String.fromCharCode(65 + optIndex)}.
-                                    </span>
-                                    <span>{option}</span>
-                                    {optIndex === q.correctAnswer && (
-                                      <span className="correct-badge">✓</span>
-                                    )}
-                                  </div>
-                                ))}
-                            </div>
+                      {Array.isArray(selectedMaterial.quiz) && selectedMaterial.quiz.map((q, index) => (
+                        <div key={index} className="quiz-item">
+                          <div className="quiz-question">
+                            <span className="question-number">Q{index + 1}.</span>
+                            <span>{q.question}</span>
+                            {q.difficulty && (
+                              <span className={`difficulty difficulty-${q.difficulty.toLowerCase()}`}>{q.difficulty}</span>
+                            )}
                           </div>
-                        ))}
+                          <div className="quiz-options">
+                            {q.options && q.options.map((option, optIndex) => (
+                              <div key={optIndex}
+                                className={`quiz-option ${optIndex === q.correctAnswer ? 'correct-answer' : ''}`}>
+                                <span className="option-letter">{String.fromCharCode(65 + optIndex)}.</span>
+                                <span>{option}</span>
+                                {optIndex === q.correctAnswer && <span className="correct-badge">✓</span>}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
 
-                {/* Metadata */}
+                {/* מטא-דאטה */}
                 <div className="detail-section detail-meta">
                   <h3>ℹ️ Information</h3>
                   <div className="meta-grid">

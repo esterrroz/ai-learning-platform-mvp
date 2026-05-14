@@ -1,11 +1,13 @@
 const { pool } = require('../config/db');
 
+// קבלת היסטוריית פרומפטים של משתמש ספציפי
 const getUserPrompts = async (req, res) => {
   try {
     const { userId } = req.params;
     if (!userId || isNaN(userId)) {
-      return res.status(400).json({ error: 'Invalid user ID.' });
+      return res.status(400).json({ error: 'מזהה משתמש לא תקין.' });
     }
+
     const result = await pool.query(
       `SELECT p.id, p.prompt, p.response, p.created_at,
               c.name AS category_name, sc.name AS sub_category_name
@@ -18,11 +20,12 @@ const getUserPrompts = async (req, res) => {
     );
     res.status(200).json({ prompts: result.rows, count: result.rows.length });
   } catch (error) {
-    console.error('[userController] getUserPrompts error:', error.message);
-    res.status(500).json({ error: 'Failed to fetch user prompts.' });
+    console.error('[userController] שגיאת קבלת פרומפטים של משתמש:', error.message);
+    res.status(500).json({ error: 'קבלת הפרומפטים נכשלה.' });
   }
 };
 
+// קבלת כל הפרומפטים מכל המשתמשים (לפאנל ניהול)
 const getPrompts = async (req, res) => {
   try {
     const result = await pool.query(`
@@ -37,25 +40,24 @@ const getPrompts = async (req, res) => {
     `);
     res.status(200).json({ prompts: result.rows, count: result.rows.length });
   } catch (error) {
-    console.error('[userController] getPrompts error:', error.message);
-    res.status(500).json({ error: 'Failed to fetch prompts.' });
+    console.error('[userController] שגיאת קבלת כל הפרומפטים:', error.message);
+    res.status(500).json({ error: 'קבלת הפרומפטים נכשלה.' });
   }
 };
 
+// רישום משתמש חדש
 const registerUser = async (req, res) => {
   try {
     const { name, phone } = req.body;
 
     if (!name || typeof name !== 'string' || name.trim().length === 0) {
-      return res.status(400).json({ error: 'Name is required.' });
+      return res.status(400).json({ error: 'שם הוא שדה חובה.' });
     }
-
     if (name.trim().length > 255) {
-      return res.status(400).json({ error: 'Name is too long.' });
+      return res.status(400).json({ error: 'השם ארוך מדי.' });
     }
-
     if (phone && typeof phone === 'string' && phone.trim().length > 20) {
-      return res.status(400).json({ error: 'Phone number is too long.' });
+      return res.status(400).json({ error: 'מספר הטלפון ארוך מדי.' });
     }
 
     const result = await pool.query(
@@ -65,11 +67,12 @@ const registerUser = async (req, res) => {
 
     res.status(201).json({ user: result.rows[0] });
   } catch (error) {
-    console.error('[userController] registerUser error:', error.message);
-    res.status(500).json({ error: 'Failed to register user.' });
+    console.error('[userController] שגיאת רישום משתמש:', error.message);
+    res.status(500).json({ error: 'רישום המשתמש נכשל.' });
   }
 };
 
+// קבלת כל המשתמשים (לפאנל ניהול)
 const getUsers = async (req, res) => {
   try {
     const result = await pool.query(
@@ -77,8 +80,8 @@ const getUsers = async (req, res) => {
     );
     res.status(200).json({ users: result.rows, count: result.rows.length });
   } catch (error) {
-    console.error('[userController] getUsers error:', error.message);
-    res.status(500).json({ error: 'Failed to fetch users.' });
+    console.error('[userController] שגיאת קבלת משתמשים:', error.message);
+    res.status(500).json({ error: 'קבלת המשתמשים נכשלה.' });
   }
 };
 

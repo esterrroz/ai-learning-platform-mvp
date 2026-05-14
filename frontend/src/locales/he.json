@@ -20,7 +20,7 @@
     "exitQuiz": "← יציאה מהחידון",
     "backToSelection": "← חזרה לבחירת חידון",
     "quizComplete": "החידון הושלם!",
-    "correct": "נכון:",
+    "correct": "נכון",
     "accuracy": "דיוק:",
     "resultsSummary": "סיכום תוצאות",
     "yourAnswer": "התשובה שלך:",
@@ -38,7 +38,8 @@
     "next": "הבא →",
     "finish": "סיום →",
     "question": "שאלה",
-    "of": "מתוך"
+    "of": "מתוך",
+    "generatedQuiz": "חידון שנוצר"
   },
   "admin": {
     "title": "פאנל ניהול",
@@ -72,7 +73,8 @@
     "summarizer": "מיכל תקציר",
     "lessonGenerator": "יוצר שיעורים",
     "adminPanel": "פאנל ניהול",
-    "learningHistory": "היסטוריית למידה"
+    "learningHistory": "היסטוריית למידה",
+    "apiDocs": "תעודת API"
   },
   "dashboard": {
     "aiLearningPlatform": "פלטפורמת למידה בעזרת בינה מלאכותית",
@@ -85,6 +87,7 @@
     "clearButton": "נקה",
     "summary": "תקציר",
     "summaryPlaceholder": "התקציר שלך יופיע כאן...",
+    "summaryHint": "התחל בהכנסת תוכן ולחץ על \"צור תקציר\"",
     "generateQuiz": "צור חידון",
     "saveMaterial": "שמור חומר",
     "materialSaved": "החומר נשמר בהצלחה!",
@@ -96,7 +99,14 @@
     "invalidPDF": "אנא העלה קובץ PDF חוקי",
     "fileTooLarge": "קובץ PDF גדול מדי. הגודל המרבי הוא 10MB",
     "generateSummaryFirst": "אנא צור תקציר תחילה",
-    "saveSummaryFirst": "אנא צור תקציר תחילה לפני שמירה"
+    "saveSummaryFirst": "אנא צור תקציר תחילה לפני שמירה",
+    "saving": "שומר",
+    "saveToLibrary": "שמור בספרייה",
+    "readyToSave": "סידור לשמירה",
+    "platform": "פלטפורמה",
+    "myMaterials": "החומר שלי",
+    "lessonGenerator": "יוצר שיעורים",
+    "studyHub": "מרכז הלימוד"
   },
   "lessonGenerator": {
     "lessonGenerator": "יוצר שיעורים",
@@ -132,7 +142,13 @@
     "processButton": "עבד",
     "clearButton": "נקה",
     "processedContent": "תוכן מעובד",
-    "contentPlaceholder": "התוכן יופיע כאן לאחר עיבוד..."
+    "contentPlaceholder": "התוכן יופיע כאן לאחר עיבוד...",
+    "noTextError": "אנא הכנס טקסט כדי ליצור תקציר",
+    "noTitleError": "אנא הכנס כותרט לחומר זה",
+    "noContentError": "אין תוכן לשמירה",
+    "savedSuccess": "✅ החומר נשמר בהצלחה!",
+    "titleWarning": "⚠️ אנא הכנס כותרט לשמירה",
+    "readyToSave": "✓ סידור לשמירה"
   },
   "myLibrary": {
     "myLibrary": "הספרייה שלי",
@@ -140,7 +156,17 @@
     "noMaterials": "לא נמצא חומר",
     "loadingMaterials": "טוען את החומר שלך...",
     "deleteMaterial": "מחק",
-    "viewMaterial": "צפה"
+    "viewMaterial": "צפה",
+    "deleteConfirm": "האם אתה בטוח שטוחן מחידון חומר זה?",
+    "refreshing": "⟳ רנעות...",
+    "refresh": "⟳ רנעות",
+    "searchPlaceholder": "🔍 חפש חומר לפי כותרת או תוכן...",
+    "result": "תוצאה",
+    "results": "תוצאות",
+    "tryAgain": "נסה שוב",
+    "noMaterialsYet": "אין חומר עדיין",
+    "noSearchResults": "אין חומר התואם את החיפוש שלך. נסה מונח חיפוש שונה.",
+    "startBySummarizing": "התחל בסיכום טקסט בדאשבורד כדי ליצור את החומר הראשון שלך!"
   },
   "quizGenerator": {
     "generateQuizzes": "צור חידונים",
@@ -151,7 +177,22 @@
     "correct": "נכון!",
     "incorrect": "לא נכון",
     "score": "ניקוד",
-    "completed": "החידון הושלם"
+    "completed": "החידון הושלם",
+    "noSummaryError": "בחומר זה אין תקציר. אנא יצור אחד תחילה.",
+    "noSummary": "אין תקציר זמין לחומר זה",
+    "needsSummary": "⚠️ חומר זה טריד תקציר כדי ליצור חידון",
+    "generatingQuiz": "יוצר חידון",
+    "generateQuiz": "צור חידון",
+    "quizGenerator": "יוצר חידונים",
+    "selectMaterial": "בחר חומר כדי ליצור חידון לו אישור מלאכותי",
+    "searchPlaceholder": "🔍 חפש חומר ...",
+    "material": "חומר",
+    "materials": "חומרים",
+    "tryAgain": "נסה שוב",
+    "loadingMaterials": "טוען את החומר שלך...",
+    "noMaterialsYet": "אין חומר עדיין",
+    "noSearchResults": "אין חומר התואם את החיפוש שלך",
+    "createMaterial": "צור חומר ב\"העלאת חומר חדש\" כדי ליצור חידונים"
   },
   "history": {
     "title": "היסטוריית למידה",
@@ -172,6 +213,8 @@
     "edit": "ערוך",
     "cancel": "ביטול",
     "ok": "אישור",
-    "signOut": "התנתק"
+    "signOut": "התנתק",
+    "switchEnglish": "המרט לאנגלית",
+    "switchHebrew": "המרט לעברית"
   }
 }

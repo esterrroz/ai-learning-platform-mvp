@@ -2,14 +2,14 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-// Attach JWT to every request if available
+// מצרף JWT לכל בקשה אם קיים ב-localStorage
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('authToken');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Auto-logout on 401 (expired/invalid token)
+// יציאה אוטומטית בעת קבלת 401 (טוקן פג תוקף או לא תקין)
 axios.interceptors.response.use(
   res => res,
   err => {
@@ -23,6 +23,7 @@ axios.interceptors.response.use(
   }
 );
 
+// התחברות — מחזיר JWT ופרטי משתמש
 export const loginUser = async (name, phone) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, { name, phone });
@@ -34,6 +35,7 @@ export const loginUser = async (name, phone) => {
   }
 };
 
+// רישום משתמש חדש (ללא JWT)
 export const registerUser = async (name, phone) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/users`, { name, phone });
@@ -43,6 +45,7 @@ export const registerUser = async (name, phone) => {
   }
 };
 
+// קבלת היסטוריית פרומפטים של משתמש ספציפי
 export const getUserPrompts = async (userId) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users/${userId}/prompts`);
@@ -52,6 +55,7 @@ export const getUserPrompts = async (userId) => {
   }
 };
 
+// קבלת כל הפרומפטים (לפאנל ניהול)
 export const getPrompts = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users/prompts`);
@@ -61,6 +65,7 @@ export const getPrompts = async () => {
   }
 };
 
+// קבלת כל המשתמשים (לפאנל ניהול)
 export const getUsers = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users`);
@@ -70,29 +75,11 @@ export const getUsers = async () => {
   }
 };
 
-export const uploadPDF = async (file) => {
-  try {
-    const formData = new FormData();
-    formData.append('pdf', file);
-
-    const response = await axios.post(`${API_BASE_URL}/materials/extract-pdf`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw error.response?.data?.error || error.message;
-  }
-};
-
+// סיכום טקסט באמצעות AI
 export const summarizeText = async (text, userId, categoryId, subCategoryId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/summarize`, {
-      text,
-      userId,
-      categoryId,
-      subCategoryId,
+      text, userId, categoryId, subCategoryId,
     });
     return response.data;
   } catch (error) {
@@ -100,44 +87,44 @@ export const summarizeText = async (text, userId, categoryId, subCategoryId) => 
   }
 };
 
+// יצירת חידון מסיכום טקסט
 export const generateQuizFromSummary = async (summary) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/materials/generate-quiz`, {
-      summary,
-    });
+    const lang = localStorage.getItem('app-language') || 'he';
+    const response = await axios.post(`${API_BASE_URL}/materials/generate-quiz`, { summary, lang });
     return response.data;
   } catch (error) {
     throw error.response?.data?.error || error.message;
   }
 };
 
+// יצירת חידון לחומר שמור (עדכון שדה quiz בטבלת materials)
 export const generateQuizForMaterial = async (materialId, summary) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/materials/${materialId}/quiz`, {
-      summary,
-    });
+    const lang = localStorage.getItem('app-language') || 'he';
+    const response = await axios.post(`${API_BASE_URL}/materials/${materialId}/quiz`, { summary, lang });
     return response.data;
   } catch (error) {
     throw error.response?.data?.error || error.message;
   }
 };
 
+// יצירת חידון לחומר שמור ושמירה בטבלת quizzes
 export const generateQuizForMaterialById = async (materialId) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/materials/${materialId}/generate-quiz`);
+    const lang = localStorage.getItem('app-language') || 'he';
+    const response = await axios.post(`${API_BASE_URL}/materials/${materialId}/generate-quiz`, { lang });
     return response.data;
   } catch (error) {
     throw error.response?.data?.error || error.message;
   }
 };
 
+// יצירת חידון מפרומפט חופשי
 export const generateQuiz = async (category, subCategory, prompt, userId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/generateQuiz`, {
-      category,
-      subCategory,
-      prompt,
-      userId,
+      category, subCategory, prompt, userId,
     });
     return response.data;
   } catch (error) {
@@ -145,15 +132,11 @@ export const generateQuiz = async (category, subCategory, prompt, userId) => {
   }
 };
 
+// יצירת שיעור מפרומפט חופשי
 export const generateLessonPrompt = async (category, subCategory, prompt, userId, categoryId, subCategoryId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials/generateLesson`, {
-      category,
-      subCategory,
-      prompt,
-      userId,
-      categoryId,
-      subCategoryId,
+      category, subCategory, prompt, userId, categoryId, subCategoryId,
     });
     return response.data;
   } catch (error) {
@@ -161,6 +144,7 @@ export const generateLessonPrompt = async (category, subCategory, prompt, userId
   }
 };
 
+// קבלת כל הקטגוריות
 export const getCategories = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/categories`);
@@ -170,6 +154,7 @@ export const getCategories = async () => {
   }
 };
 
+// קבלת תת-קטגוריות לפי קטגוריה
 export const getSubCategories = async (categoryId) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/categories/${categoryId}/subcategories`);
@@ -179,6 +164,7 @@ export const getSubCategories = async (categoryId) => {
   }
 };
 
+// קבלת כל חומרי הלימוד
 export const getMaterials = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/materials`);
@@ -188,6 +174,7 @@ export const getMaterials = async () => {
   }
 };
 
+// קבלת חומר לימוד בודד לפי ID
 export const getMaterial = async (id) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/materials/${id}`);
@@ -197,14 +184,11 @@ export const getMaterial = async (id) => {
   }
 };
 
+// שמירת חומר לימוד חדש
 export const saveMaterial = async (title, original_text, summary, quiz, userId) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/materials`, {
-      title,
-      original_text,
-      summary,
-      quiz,
-      userId,
+      title, original_text, summary, quiz, userId,
     });
     return response.data;
   } catch (error) {
@@ -212,6 +196,7 @@ export const saveMaterial = async (title, original_text, summary, quiz, userId) 
   }
 };
 
+// מחיקת חומר לימוד לפי ID
 export const deleteMaterial = async (id) => {
   try {
     const response = await axios.delete(`${API_BASE_URL}/materials/${id}`);

@@ -3,12 +3,14 @@ import '../styles/Toast.css';
 
 const ToastContext = createContext(null);
 
+// ספק הודעות Toast — מציג הודעות שגיאה/הצלחה זמניות (4 שניות)
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
   const showToast = useCallback((message, type = 'error') => {
     const id = Date.now();
     setToasts(prev => [...prev, { id, message, type }]);
+    // הסרה אוטומטית לאחר 4 שניות
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 4000);
   }, []);
 
@@ -27,4 +29,5 @@ export function ToastProvider({ children }) {
   );
 }
 
+// הוק לשימוש ב-showToast מכל קומפוננטה
 export const useToast = () => useContext(ToastContext);

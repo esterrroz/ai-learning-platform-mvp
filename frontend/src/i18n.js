@@ -3,37 +3,31 @@ import { initReactI18next } from 'react-i18next';
 import enTranslations from './locales/en.json';
 import heTranslations from './locales/he.json';
 
-// Get saved language from localStorage or default to 'en'
-const savedLanguage = localStorage.getItem('app-language') || 'en';
+// קריאת שפה שמורה מ-localStorage, ברירת מחדל: עברית
+const savedLanguage = localStorage.getItem('app-language') || 'he';
 
-// Configure i18next
+// הגדרת i18next עם תמיכה בעברית ואנגלית
 i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: {
-        translation: enTranslations,
-      },
-      he: {
-        translation: heTranslations,
-      },
+      en: { translation: enTranslations },
+      he: { translation: heTranslations },
     },
     lng: savedLanguage,
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
+    fallbackLng: 'he',
+    interpolation: { escapeValue: false },
   });
 
-// Update HTML dir attribute and localStorage when language changes
+// עדכון כיוון הטקסט (RTL/LTR) ושמירת השפה בעת החלפה
 i18n.on('languageChanged', (lang) => {
-  document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+  document.documentElement.dir  = lang === 'he' ? 'rtl' : 'ltr';
   document.documentElement.lang = lang;
   localStorage.setItem('app-language', lang);
 });
 
-// Set initial dir attribute
-document.documentElement.dir = savedLanguage === 'he' ? 'rtl' : 'ltr';
+// הגדרת כיוון ראשוני בטעינה
+document.documentElement.dir  = savedLanguage === 'he' ? 'rtl' : 'ltr';
 document.documentElement.lang = savedLanguage;
 
 export default i18n;

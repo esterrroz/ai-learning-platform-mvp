@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { getUserPrompts } from '../services/api';
 import '../styles/LearningHistory.css';
 
+// היסטוריית למידה — מציג את כל הפרומפטים שהמשתמש שלח
 export default function LearningHistory() {
   const { t } = useTranslation();
-  const [prompts, setPrompts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [expanded, setExpanded] = useState(null);
+  const [prompts, setPrompts]   = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState('');
+  const [expanded, setExpanded] = useState(null); // ID של הפרומפט הפתוח
 
   const userId = localStorage.getItem('userId');
 
@@ -20,8 +21,7 @@ export default function LearningHistory() {
       .finally(() => setLoading(false));
   }, [userId, t]);
 
-  const formatDate = (iso) =>
-    iso ? new Date(iso).toLocaleString() : '—';
+  const formatDate = (iso) => iso ? new Date(iso).toLocaleString() : '—';
 
   if (loading) return (
     <div className="lh-loading">
@@ -43,6 +43,7 @@ export default function LearningHistory() {
 
       {error && <div className="lh-error">{error}</div>}
 
+      {/* מצב ריק */}
       {!error && prompts.length === 0 && (
         <div className="lh-empty">
           <span className="lh-empty-icon">📭</span>
@@ -50,13 +51,14 @@ export default function LearningHistory() {
         </div>
       )}
 
+      {/* רשימת פרומפטים */}
       {prompts.length > 0 && (
         <div className="lh-list">
           {prompts.map((p) => (
             <div key={p.id} className="lh-card">
               <div className="lh-card-top">
                 <div className="lh-badges">
-                  {p.category_name && <span className="lh-badge lh-badge-cat">{p.category_name}</span>}
+                  {p.category_name     && <span className="lh-badge lh-badge-cat">{p.category_name}</span>}
                   {p.sub_category_name && <span className="lh-badge lh-badge-sub">{p.sub_category_name}</span>}
                 </div>
                 <span className="lh-date">{formatDate(p.created_at)}</span>
@@ -64,6 +66,7 @@ export default function LearningHistory() {
 
               <p className="lh-prompt-text">💬 {p.prompt}</p>
 
+              {/* הצגת תשובה בלחיצה */}
               {p.response && (
                 <div className="lh-response-wrap">
                   <button

@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// In production (Render), use DATABASE_URL; locally use individual vars
+// בסביבת ייצור (Render) משתמשים ב-DATABASE_URL; בפיתוח מקומי — משתנים נפרדים
 const poolConfig = process.env.DATABASE_URL
   ? {
       connectionString: process.env.DATABASE_URL,
@@ -11,39 +11,40 @@ const poolConfig = process.env.DATABASE_URL
       connectionTimeoutMillis: 10000,
     }
   : {
-      user: process.env.DB_USER,
+      user:     process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
+      host:     process.env.DB_HOST,
+      port:     process.env.DB_PORT,
       database: process.env.DB_NAME,
       connectionTimeoutMillis: 10000,
     };
 
-console.log(`📡 DB mode: ${process.env.DATABASE_URL ? 'DATABASE_URL (cloud)' : 'individual vars (local)'}`);
+console.log(`📡 מצב DB: ${process.env.DATABASE_URL ? 'DATABASE_URL (ענן)' : 'משתנים נפרדים (מקומי)'}`);
 
+// יצירת מאגר חיבורים ל-PostgreSQL
 const pool = new Pool(poolConfig);
 
 pool.on('error', (err) => {
-  console.error('❌ Unexpected error on idle client:', err.message);
+  console.error('❌ שגיאה בלתי צפויה בחיבור פנוי:', err.message);
 });
 
 pool.on('connect', () => {
-  console.log('✅ Successfully connected to PostgreSQL');
+  console.log('✅ חיבור ל-PostgreSQL הצליח');
 });
 
-// Retry logic: wait for DB to be ready (useful on Render cold starts)
+// לוגיקת ניסיון חוזר — שימושי ב-Render שבו ה-DB מתעורר לאט
 const waitForDb = async (retries = 12, delay = 5000) => {
   for (let i = 0; i < retries; i++) {
     try {
       await pool.query('SELECT NOW()');
-      console.log('✅ Database is ready');
+      console.log('✅ בסיס הנתונים מוכן');
       return true;
     } catch (err) {
       if (i < retries - 1) {
-        console.log(`⏳ Database not ready yet, retrying in ${delay / 1000}s (attempt ${i + 1}/${retries})...`);
+        console.log(`⏳ בסיס הנתונים עדיין לא מוכן, מנסה שוב בעוד ${delay / 1000}ש (ניסיון ${i + 1}/${retries})...`);
         await new Promise((resolve) => setTimeout(resolve, delay));
       } else {
-        console.error('❌ Failed to connect to database after retries');
+        console.error('❌ חיבור לבסיס הנתונים נכשל לאחר כל הניסיונות');
         throw err;
       }
     }

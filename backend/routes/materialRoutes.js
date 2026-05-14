@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const {
-  extractPDF,
   summarize,
   generateQuizFromPrompt,
   generateLessonFromPrompt,
@@ -21,38 +20,7 @@ const {
  *   description: Learning materials — summarize, quiz, and manage content
  */
 
-/**
- * @swagger
- * /api/materials/extract-pdf:
- *   post:
- *     summary: Extract text from an uploaded PDF
- *     tags: [Materials]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               pdf:
- *                 type: string
- *                 format: binary
- *     responses:
- *       200:
- *         description: Extracted text
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 text: { type: string }
- *       400:
- *         description: Invalid file
- *         content:
- *           application/json:
- *             schema: { $ref: '#/components/schemas/Error' }
- */
-router.post('/extract-pdf', extractPDF);
+
 
 /**
  * @swagger

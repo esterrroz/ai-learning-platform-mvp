@@ -20,7 +20,7 @@
     "exitQuiz": "← Exit Quiz",
     "backToSelection": "← Back to Quiz Selection",
     "quizComplete": "Quiz Complete!",
-    "correct": "Correct:",
+    "correct": "Correct",
     "accuracy": "Accuracy:",
     "resultsSummary": "Results Summary",
     "yourAnswer": "Your answer:",
@@ -38,7 +38,8 @@
     "next": "Next →",
     "finish": "Finish →",
     "question": "Question",
-    "of": "of"
+    "of": "of",
+    "generatedQuiz": "Generated Quiz"
   },
   "admin": {
     "title": "Admin Panel",
@@ -72,7 +73,8 @@
     "summarizer": "Summarizer",
     "lessonGenerator": "Lesson Generator",
     "adminPanel": "Admin Panel",
-    "learningHistory": "Learning History"
+    "learningHistory": "Learning History",
+    "apiDocs": "API Documentation"
   },
   "dashboard": {
     "aiLearningPlatform": "AI Learning Platform",
@@ -85,6 +87,7 @@
     "clearButton": "Clear",
     "summary": "Summary",
     "summaryPlaceholder": "Your summary will appear here...",
+    "summaryHint": "Start by entering content and clicking \"Summarize\"",
     "generateQuiz": "Generate Quiz",
     "saveMaterial": "Save Material",
     "materialSaved": "Material saved successfully!",
@@ -96,7 +99,14 @@
     "invalidPDF": "Please upload a valid PDF file",
     "fileTooLarge": "PDF file is too large. Maximum size is 10MB",
     "generateSummaryFirst": "Please generate a summary first",
-    "saveSummaryFirst": "Please generate a summary first before saving"
+    "saveSummaryFirst": "Please generate a summary first before saving",
+    "saving": "Saving",
+    "saveToLibrary": "Save to Library",
+    "readyToSave": "Ready to save",
+    "platform": "Platform",
+    "myMaterials": "My Materials",
+    "lessonGenerator": "Lesson Generator",
+    "studyHub": "Study Hub"
   },
   "lessonGenerator": {
     "lessonGenerator": "Lesson Generator",
@@ -132,7 +142,13 @@
     "processButton": "Process",
     "clearButton": "Clear",
     "processedContent": "Processed Content",
-    "contentPlaceholder": "Content will appear here after processing..."
+    "contentPlaceholder": "Content will appear here after processing...",
+    "noTextError": "Please enter some text to summarize",
+    "noTitleError": "Please enter a title for this material",
+    "noContentError": "No content to save",
+    "savedSuccess": "✅ Material saved to library successfully!",
+    "titleWarning": "⚠️ Please enter a title to save",
+    "readyToSave": "✓ Ready to save"
   },
   "myLibrary": {
     "myLibrary": "My Library",
@@ -140,7 +156,17 @@
     "noMaterials": "No materials found",
     "loadingMaterials": "Loading your materials...",
     "deleteMaterial": "Delete",
-    "viewMaterial": "View"
+    "viewMaterial": "View",
+    "deleteConfirm": "Are you sure you want to delete this material?",
+    "refreshing": "⟳ Refreshing...",
+    "refresh": "⟳ Refresh",
+    "searchPlaceholder": "🔍 Search materials by title or content...",
+    "result": "result",
+    "results": "results",
+    "tryAgain": "Try Again",
+    "noMaterialsYet": "No materials yet",
+    "noSearchResults": "No materials match your search. Try a different search term.",
+    "startBySummarizing": "Start by summarizing some text in the Dashboard to create your first material!"
   },
   "quizGenerator": {
     "generateQuizzes": "Generate Quizzes",
@@ -151,7 +177,22 @@
     "correct": "Correct!",
     "incorrect": "Incorrect",
     "score": "Score",
-    "completed": "Quiz Completed"
+    "completed": "Quiz Completed",
+    "noSummaryError": "This material does not have a summary. Please create one first.",
+    "noSummary": "No summary available for this material",
+    "needsSummary": "⚠️ This material needs a summary to generate a quiz",
+    "generatingQuiz": "Generating Quiz",
+    "generateQuiz": "Generate Quiz",
+    "quizGenerator": "Quiz Generator",
+    "selectMaterial": "Select a material to generate an AI-powered quiz",
+    "searchPlaceholder": "🔍 Search materials...",
+    "material": "material",
+    "materials": "materials",
+    "tryAgain": "Try Again",
+    "loadingMaterials": "Loading your materials...",
+    "noMaterialsYet": "No materials yet",
+    "noSearchResults": "No materials match your search",
+    "createMaterial": "Create a material in \"Upload New\" to generate quizzes"
   },
   "history": {
     "title": "Learning History",
@@ -172,6 +213,8 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "ok": "OK",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "switchEnglish": "Switch to English",
+    "switchHebrew": "Switch to Hebrew"
   }
 }
