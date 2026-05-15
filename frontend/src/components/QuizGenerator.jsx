@@ -50,7 +50,7 @@ export default function QuizGenerator() {
     setSelectedMaterial(material); setQuiz(null); setTakingQuiz(false);
   };
 
-  // יצירת חידון — משתמש בנתיב DB אם יש ID, אחרת fallback לסיכום
+  // יצירת חידון — אם לחומר יש ID שמור, שומר גם בטבלת quizzes; אחרת יוצר בזיכרון בלבד
   const handleGenerateQuiz = async () => {
     if (!selectedMaterial?.summary) { setError(t('quizGenerator.noSummaryError')); return; }
     setQuizLoading(true); setError(''); setQuiz(null); setTakingQuiz(false);
@@ -77,7 +77,7 @@ export default function QuizGenerator() {
       m.summary?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // מצב לקיחת חידון
+  // מצב לקיחת חידון — מעביר שליטה לקומפוננטת QuizTaking
   if (takingQuiz && quiz) {
     return (
       <QuizTaking
@@ -88,7 +88,7 @@ export default function QuizGenerator() {
     );
   }
 
-  // מצב חומר נבחר — הצגת סיכום ואפשרות יצירת חידון
+  // מצב חומר נבחר — מציג סיכום ואפשרות ליצור חידון
   if (selectedMaterial && !takingQuiz) {
     return (
       <div className="quiz-generator">
@@ -163,7 +163,7 @@ export default function QuizGenerator() {
     );
   }
 
-  // מצב רשימת חומרים
+  // מצב ברירת מחדל — רשימת כל החומרים עם חיפוש
   return (
     <div className="quiz-generator">
       <div className="quiz-header">

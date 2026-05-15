@@ -7,10 +7,8 @@ const REQUIRED_ENV = [
 ];
 
 // בדיקה שיש הגדרות חיבור לבסיס הנתונים
-const hasDbUrl  = !!process.env.DATABASE_URL;
-const hasDbVars = process.env.DB_HOST && process.env.DB_USER && process.env.DB_NAME;
-if (!hasDbUrl && !hasDbVars) {
-  console.error('❌ חסרות הגדרות DB: הגדר DATABASE_URL (ענן) או DB_HOST/DB_USER/DB_NAME/DB_PASSWORD/DB_PORT (מקומי)');
+if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_NAME) {
+  console.error('❌ חסרות הגדרות DB: הגדר DB_HOST/DB_USER/DB_NAME/DB_PASSWORD/DB_PORT');
   process.exit(1);
 }
 

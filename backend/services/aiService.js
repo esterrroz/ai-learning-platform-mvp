@@ -1,8 +1,9 @@
 const OpenAI = require('openai');
 
-// אתחול לקוח OpenAI עם מפתח ה-API מהסביבה
+// אתחול OpenAI עם מפתח ה-API מהסביבה
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+// נושאים אקדמיים נתמכים על ידי הפלטפורמה
 const ACADEMIC_SUBJECTS = 'English, Mathematics, History, Biology, and Grammar';
 
 // הנחיית מערכת בסיסית לכל הקריאות ל-AI

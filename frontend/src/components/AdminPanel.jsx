@@ -12,7 +12,7 @@ export default function AdminPanel() {
   const [promptsError, setPromptsError] = useState('');
   const [loading, setLoading]       = useState(true);
 
-  // טעינת נתונים במקביל
+// טעינת נתונים במקביל — משתמשים ופרומפטים
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);

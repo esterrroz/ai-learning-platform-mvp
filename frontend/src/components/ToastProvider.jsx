@@ -4,6 +4,7 @@ import '../styles/Toast.css';
 const ToastContext = createContext(null);
 
 // ספק הודעות Toast — מציג הודעות שגיאה/הצלחה זמניות (4 שניות)
+// showToast(message, type) — type: 'error' | 'success'
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
